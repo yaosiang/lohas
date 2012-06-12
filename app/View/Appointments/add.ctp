@@ -48,6 +48,7 @@
     echo $this->Form->input('serial_number', array(
         'type' => 'text',
         'label' => '掛號證',
+        'helpInline' => '若病患為複診，請輸入掛號證',
         'placeholder' => '若病患為複診，請輸入掛號證'
     ));
 

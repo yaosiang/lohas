@@ -1,7 +1,7 @@
 <?php echo $this->Form->create('Registration', array('class' => 'form-horizontal', 'action' => 'add')); ?>
 
 <fieldset>
-    <legend>新增門診時段</legend>
+    <legend>新增門診資料</legend>
 
     <?php
     echo $this->Html->scriptBlock('$("#reg_datepicker").datepicker({weekStart: 1});', array('inline' => false));
@@ -34,12 +34,14 @@
     echo $this->Form->input('patient_name', array(
         'type' => 'text',
         'label' => '姓名',
+        'helpInline' => '若病患還沒有掛號證，請輸入姓名',
         'placeholder' => '若病患還沒有掛號證，請輸入姓名',
     ));
 
     echo $this->Form->input('serial_number', array(
         'type' => 'text',
         'label' => '掛號證',
+        'helpInline' => '若病患為複診，請輸入掛號證',
         'placeholder' => '若病患為複診，請輸入掛號證',
     ));
 
@@ -52,7 +54,7 @@
 
     <div class="form-actions">
 <?php
-echo $this->Form->submit('新增門診時段', array(
+echo $this->Form->submit('新增門診資料', array(
     'div' => false,
     'class' => 'btn btn-primary',
 ));
