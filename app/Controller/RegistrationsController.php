@@ -16,9 +16,12 @@ class RegistrationsController extends AppController {
         $this->set('year', $y);
         $this->set('month', $m);
         $this->set('day', $d);
+        $this->set('title_for_layout', '心樂活診所 - 門診資料');
     }
 
     public function add() {
+
+        $this->set('title_for_layout', '心樂活診所 - 門診資料');
 
         if ($this->request->is('post')) {
 
@@ -72,6 +75,8 @@ class RegistrationsController extends AppController {
     }
 
     public function edit($id = null) {
+
+        $this->set('title_for_layout', '心樂活診所 - 門診資料');
 
         $this->Registration->id = $id;
 
@@ -334,7 +339,6 @@ class RegistrationsController extends AppController {
     }
 
     public function search($parm) {
-        
     }
 
     private function isExistNextAppointment($id = null) {

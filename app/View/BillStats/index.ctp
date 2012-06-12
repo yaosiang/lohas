@@ -6,7 +6,7 @@
     <div class="accordion-group">
       <div class="accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-          日門診收入統計
+          當日門診收入統計
         </a>
       </div>
       <div id="collapseOne" class="accordion-body collapse in">

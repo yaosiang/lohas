@@ -14,7 +14,7 @@
     ));
 
     echo $this->Form->input('phone', array(
-        'label' => '主要聯絡電話'
+        'label' => '聯絡電話'
     ));
 
     echo $this->Form->input('initial_date', array(

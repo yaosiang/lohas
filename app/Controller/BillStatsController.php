@@ -7,7 +7,7 @@ class BillStatsController extends AppController {
     public $components = array('Session');
 
     public function index() {
-        
+        $this->set('title_for_layout', '心樂活診所 - 門診收入');
     }
 
     public function showAnnualBillStat($y = null) {
@@ -19,6 +19,7 @@ class BillStatsController extends AppController {
         $results = $this->Bill->query("CALL getAnnualBillStat(" . $y . ")");
         $this->set('results', $results);
         $this->set('year', $y);
+        $this->set('title_for_layout', '心樂活診所 - 門診收入');
 
         CakeLog::write('debug', 'BillStatsController.showAnnualBillStat() - 顯示年門診收入');
     }
@@ -43,6 +44,7 @@ class BillStatsController extends AppController {
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
+        $this->set('title_for_layout', '心樂活診所 - 門診收入');
 
         CakeLog::write('debug', 'BillStatsController.showMonthlyBillStat() - 顯示月門診收入');
     }
@@ -70,6 +72,7 @@ class BillStatsController extends AppController {
         $this->set('year', $y);
         $this->set('month', $m);
         $this->set('day', $d);
+        $this->set('title_for_layout', '心樂活診所 - 門診收入');
 
         CakeLog::write('debug', 'BillStatsController.showDailyBillStat() - 顯示日門診收入');
     }

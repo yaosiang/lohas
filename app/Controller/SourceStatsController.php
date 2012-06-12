@@ -7,7 +7,7 @@ class SourceStatsController extends AppController {
     public $components = array('Session');
 
     public function index() {
-        
+        $this->set('title_for_layout', '心樂活診所 - 初診統計');
     }
 
     public function showAnnualSourceStat($y = null) {
@@ -19,6 +19,7 @@ class SourceStatsController extends AppController {
         $results = $this->Source->query("CALL getAnnualSourceStat(" . $y . ")");
         $this->set('results', $results);
         $this->set('year', $y);
+        $this->set('title_for_layout', '心樂活診所 - 初診統計');
 
         CakeLog::write('debug', 'SourceStatsController.showAnnualSourceStat() - 顯示年出診來源統計');
     }
@@ -43,6 +44,7 @@ class SourceStatsController extends AppController {
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
+        $this->set('title_for_layout', '心樂活診所 - 初診統計');
 
         CakeLog::write('debug', 'SourceStatsController.showMonthlySourceStat() - 顯示月門診收入');
     }
@@ -70,7 +72,8 @@ class SourceStatsController extends AppController {
         $this->set('year', $y);
         $this->set('month', $m);
         $this->set('day', $d);
-
+        $this->set('title_for_layout', '心樂活診所門診 - 初診統計');
+        
         CakeLog::write('debug', 'SourceStatsController.showDailySourceStat() - 顯示日門診收入');
     }
 

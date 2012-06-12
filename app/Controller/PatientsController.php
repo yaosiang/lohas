@@ -12,13 +12,16 @@ class PatientsController extends AppController {
         $this->paginate = array(
             // 以掛號證來排序，降冪排序
             'order' => array('serial_number' => 'desc'),
-            // 每頁 12 筆記錄
-            'limit' => 12
+            // 每頁 25 筆記錄
+            'limit' => 25
         );
         $this->set('patients', $this->paginate('Patient'));
+        $this->set('title_for_layout', '心樂活診所 - 病患資料');
     }
 
     public function add($registration_id = null, $patient_name = null) {
+
+        $this->set('title_for_layout', '心樂活診所 - 病患資料');
 
         // 填滿初診來源
         $this->set('sources', $this->Source->find('list', array('fields' => 'id, description')));
@@ -68,6 +71,8 @@ class PatientsController extends AppController {
 
     public function edit($id = null) {
 
+        $this->set('title_for_layout', '心樂活診所 - 病患資料');
+
         $this->Patient->id = $id;
         $this->set('sources', $this->Source->find('list', array('fields' => 'id, description')));
 
@@ -116,6 +121,8 @@ class PatientsController extends AppController {
     }
 
     public function search() {
+
+        $this->set('title_for_layout', '心樂活診所 - 病患資料');
 
         if (!is_null($this->request->data['Patient']['parm'])) {
 

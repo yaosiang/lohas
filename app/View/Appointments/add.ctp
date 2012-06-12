@@ -1,7 +1,7 @@
 <?php echo $this->Form->create('Appointment', array('class' => 'form-horizontal', 'action' => 'add')); ?>
 
 <fieldset>
-    <legend>新增預約時段</legend>
+    <legend>新增預約記錄</legend>
 
     <?php
     echo $this->Html->scriptBlock('$("#app_datepicker").datepicker({weekStart: 1});', array('inline' => false));
@@ -66,7 +66,7 @@
 
     <div class="form-actions">
 <?php
-echo $this->Form->submit('新增預約時段', array(
+echo $this->Form->submit('新增預約記錄', array(
     'div' => false,
     'class' => 'btn btn-primary',
 ));

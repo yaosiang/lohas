@@ -6,7 +6,7 @@ class AppointmentContactsController extends AppController {
     public $uses = array('Appointment', 'AppointmentContact');
     public $components = array('Session');
 
-    public function showMonthlyAppointmentContact($y = null, $m = null) {
+    public function showMonthlyAppointmentContact($y = null, $m = null) {        
 
         if ($this->request->is('get')) {
             is_null($m) ? $m = date("m") : $m;
@@ -22,10 +22,13 @@ class AppointmentContactsController extends AppController {
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
+        $this->set('title_for_layout', '心樂活診所 - 預約關懷');        
     }
 
     public function edit($id = null) {
 
+        $this->set('title_for_layout', '心樂活診所 - 預約關懷');
+        
         $this->AppointmentContact->id = $id;
 
         if ($this->request->is('get')) {

@@ -24,17 +24,12 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
 ?>
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="span8">
         <h1>
             <span id="appDate"><?php echo $year; ?>-<?php echo $month; ?>-<?php echo $day; ?></span>
-            預約清單
+            預約記錄
             <?php echo $this->Html->link('', '#', array('class' => 'btn', 'icon' => 'calendar', 'id' => 'dp', 'data-date-format' => 'yyyy-mm-dd', 'data-date' => $year . '-' . $month . '-' . $day)); ?>
         </h1>
-    </div>
-    <div class="span2">
-        <div class="btn-group pull-right">
-            <?php echo $this->Html->link('新增預約時段', '/appointments/add', array('class' => 'btn pull-left', 'icon' => 'plus')); ?>
-        </div>
     </div>
     <div class="span4">
         <?php
@@ -47,6 +42,10 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
         echo $this->Form->end();
         ?>
     </div>        
+</div>
+
+<div class="btn-group">
+    <?php echo $this->Html->link('新增預約記錄', '/appointments/add', array('class' => 'btn pull-left', 'icon' => 'plus')); ?>
 </div>
 
 <hr />

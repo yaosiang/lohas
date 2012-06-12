@@ -22,6 +22,7 @@ class CallListsController extends AppController {
         $this->set('year', $y);
         $this->set('month', $m);
         $this->set('day', $d);
+        $this->set('title_for_layout', '心樂活診所 - 簡訊關懷');
 
         CakeLog::write('debug', 'CallListsController.showCallList() - 顯示當日簡訊提醒名單');
     }

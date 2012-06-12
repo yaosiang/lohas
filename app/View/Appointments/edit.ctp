@@ -1,7 +1,7 @@
 <?php echo $this->Form->create('Appointment', array('class' => 'form-horizontal', 'action' => 'edit')); ?>
 
 <fieldset>
-    <legend>新增預約時間</legend>
+    <legend>修改預約記錄</legend>
 
     <?php
     echo $this->Html->scriptBlock('$("#app_datepicker").datepicker({weekStart: 1});', array('inline' => false));
@@ -38,7 +38,7 @@
     if ($isNoShow) {
         echo $this->Form->input('appointment_datetime', array(
             'type' => 'text',
-            'label' => '門診時間',
+            'label' => '預約時間',
             'class' => 'dropdown-timepicker',
             'disabled' => true
         ));
@@ -46,7 +46,7 @@
     } else {
         echo $this->Form->input('appointment_datetime', array(
             'type' => 'text',
-            'label' => '門診時間',
+            'label' => '預約時間',
             'class' => 'dropdown-timepicker'
         ));
     }

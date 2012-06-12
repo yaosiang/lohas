@@ -17,10 +17,13 @@ class AppointmentsController extends AppController {
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
-        $this->set('day', $d);        
+        $this->set('day', $d);
+        $this->set('title_for_layout', '心樂活診所 - 預約記錄');
     }
 
     public function add() {
+
+        $this->set('title_for_layout', '心樂活診所 - 預約記錄');
 
         $this->set('notifications', $this->Notification->find('list', array('fields' => 'id, description')));
 
@@ -104,6 +107,8 @@ class AppointmentsController extends AppController {
     }
 
     public function edit($id = null) {
+
+        $this->set('title_for_layout', '心樂活診所 - 預約記錄');
 
         $this->Appointment->id = $id;
 

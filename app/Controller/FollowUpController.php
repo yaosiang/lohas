@@ -22,6 +22,7 @@ class FollowUpController extends AppController {
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
+        $this->set('title_for_layout', '心樂活診所 - 回診追蹤');
     }
 
     public function downloadMonthlyFollowUp($y = null, $m = null) {
@@ -35,6 +36,8 @@ class FollowUpController extends AppController {
     }
 
     public function edit($id = null, $registrationId = null) {
+
+        $this->set('title_for_layout', '心樂活診所 - 回診追蹤');
 
         $this->FollowUp->id = $id;
 

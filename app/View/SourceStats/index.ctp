@@ -69,7 +69,7 @@
     <div class="accordion-group">
       <div class="accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-        日初診來源統計
+        當日初診來源統計
         </a>
       </div>
       <div id="collapseThree" class="accordion-body collapse">

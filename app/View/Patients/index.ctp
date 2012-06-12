@@ -28,8 +28,8 @@
 <table class="table table-striped">
     <thead>
     <th>掛號証</th>
-    <th>姓名</th>
-    <th>主要聯絡電話</th>
+    <th>病患姓名</th>
+    <th>聯絡電話</th>
     <th>初診日期</th>
     <th>初診來源</th>
     <th>備註</th>
