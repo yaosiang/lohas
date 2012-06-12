@@ -23,16 +23,16 @@
 
 <table class="table table-striped">
     <thead>
-        <th>門診來源</th>
-        <th>人數</th>
-    </thead>
-    <tbody>
+    <th>門診來源</th>
+    <th>人數</th>
+</thead>
+<tbody>
     <?php foreach ($results as $result): ?>
-    <tr>
-        <td><?php echo $result['sources']['description']; ?></td>
-        <td><?php echo $result[0]['counts']; ?></td>
-    </tr>
+        <tr>
+            <td><?php echo $result['sources']['description']; ?></td>
+            <td><?php echo $result[0]['counts']; ?></td>
+        </tr>
     <?php endforeach; ?>
-    </tbody>
+</tbody>
 
 </table>

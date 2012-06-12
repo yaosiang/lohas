@@ -7,7 +7,7 @@ class SourceStatsController extends AppController {
     public $components = array('Session');
 
     public function index() {
-
+        
     }
 
     public function showAnnualSourceStat($y = null) {
@@ -62,9 +62,9 @@ class SourceStatsController extends AppController {
         if ($this->request->is('post')) {
             $y = $this->request->data['SourceStat']['y']['year'];
             $m = $this->request->data['SourceStat']['m']['month'];
-            $d = $this->request->data['SourceStat']['d']['day'];            
+            $d = $this->request->data['SourceStat']['d']['day'];
         }
-        
+
         $results = $this->Source->query("CALL getDailySourceStat(" . $y . ", " . $m . ", " . $d . ")");
         $this->set('results', $results);
         $this->set('year', $y);

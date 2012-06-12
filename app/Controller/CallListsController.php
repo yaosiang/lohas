@@ -14,34 +14,28 @@ class CallListsController extends AppController {
             $d = $this->request->data['Appointment']['d']['day'];
         }
 
-        $date = date("Y-m-d", mktime(0, 0, 0, 
-                (is_null($m) ? $m = date("m") : $m), 
-                (is_null($d) ? $d = date("d") : $d), 
-                (is_null($y) ? $y = date("Y") : $y)
+        $date = date("Y-m-d", mktime(0, 0, 0, (is_null($m) ? $m = date("m") : $m), (is_null($d) ? $d = date("d") : $d), (is_null($y) ? $y = date("Y") : $y)
                 ));
 
         $results = $this->Appointment->query("CALL getCallList('" . $date . "')");
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
-        $this->set('day', $d);                
+        $this->set('day', $d);
 
         CakeLog::write('debug', 'CallListsController.showCallList() - 顯示當日簡訊提醒名單');
     }
 
     public function downloadCallList($y = null, $m = null, $d = null) {
 
-        $date = date("Y-m-d", mktime(0, 0, 0, 
-                (is_null($m) ? $m = date("m") : $m), 
-                (is_null($d) ? $d = date("d") : $d), 
-                (is_null($y) ? $y = date("Y") : $y)
+        $date = date("Y-m-d", mktime(0, 0, 0, (is_null($m) ? $m = date("m") : $m), (is_null($d) ? $d = date("d") : $d), (is_null($y) ? $y = date("Y") : $y)
                 ));
 
         $results = $this->Appointment->query("CALL getCallList('" . $date . "')");
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
-        $this->set('day', $d);                
+        $this->set('day', $d);
 
         CakeLog::write('debug', 'CallListsController.downloadCallList() - 匯出當日簡訊提醒名單');
     }

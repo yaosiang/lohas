@@ -14,7 +14,7 @@ class TimeSlot extends AppModel {
         'Registration' => array(
             'className' => 'Registration'
         )
-    );    
+    );
 
     public function getTimeSlot($datetime) {
 
@@ -22,17 +22,17 @@ class TimeSlot extends AppModel {
         // 2 menas 午
         // 3 means 晚
 
-        $date1 = new Datetime($datetime);
+        $date = new Datetime($datetime);
         $morningEnd = new Datetime($datetime);
         $afternoonStart = new Datetime($datetime);
         $eveningStart = new Datetime($datetime);
 
-        $morningEnd->setTime(12, 0, 0);        
+        $morningEnd->setTime(12, 0, 0);
         $afternoonStart->setTime(14, 30, 0);
-        $eveningStart->setTime(18, 0, 0);    
+        $eveningStart->setTime(18, 0, 0);
 
-        if ($date1  > $morningEnd) {
-            if ($date1 > $eveningStart) {
+        if ($date > $morningEnd) {
+            if ($date > $eveningStart) {
                 return 3;
             } else {
                 return 2;
@@ -40,7 +40,6 @@ class TimeSlot extends AppModel {
         } else {
             return 1;
         }
-
     }
 
 }

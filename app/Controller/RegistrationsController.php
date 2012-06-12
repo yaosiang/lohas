@@ -3,16 +3,13 @@
 class RegistrationsController extends AppController {
 
     public $helpers = array('Time');
-    public $uses = array('Appointment', 'Bill', 'FollowUp', 'Further', 'Notification', 
+    public $uses = array('Appointment', 'Bill', 'FollowUp', 'Further', 'Notification',
         'Patient', 'Registration', 'TimeSlot');
     public $components = array('Session');
 
     public function showDailyRegistration($y = null, $m = null, $d = null) {
 
-        $date = date("Y-m-d", mktime(0, 0, 0, 
-                (is_null($m) ? $m = date("m") : $m), 
-                (is_null($d) ? $d = date("d") : $d), 
-                (is_null($y) ? $y = date("Y") : $y)
+        $date = date("Y-m-d", mktime(0, 0, 0, (is_null($m) ? $m = date("m") : $m), (is_null($d) ? $d = date("d") : $d), (is_null($y) ? $y = date("Y") : $y)
                 ));
         $results = $this->Registration->query("CALL getDailyRegistration('" . $date . "')");
         $this->set('results', $results);
@@ -26,8 +23,8 @@ class RegistrationsController extends AppController {
         if ($this->request->is('post')) {
 
             // 合併門診日期及門診時間
-            $registration_time = $this->request->data['Registration']['registration_date'] . ' ' . 
-                                date('H:i:s', strtotime($this->request->data['Registration']['registration_datetime']));
+            $registration_time = $this->request->data['Registration']['registration_date'] . ' ' .
+                    date('H:i:s', strtotime($this->request->data['Registration']['registration_datetime']));
             $this->request->data('Registration.registration_time', $registration_time);
 
             // 設定一個暫時的病患名稱
@@ -58,7 +55,7 @@ class RegistrationsController extends AppController {
                 $this->Session->setFlash('門診時段已新增！', 'alert', array(
                     'plugin' => 'TwitterBootstrap',
                     'class' => 'alert-success'
-                )); 
+                ));
                 CakeLog::write('debug', 'RegistrationsController.add() - 新增門診時段(' . $this->Registration->id . ')');
 
                 $date = new DateTime($this->request->data['Registration']['registration_time']);
@@ -98,7 +95,7 @@ class RegistrationsController extends AppController {
             $this->set('registration_datetime', $date->format('h:i A'));
             $this->request->data('Registration.registration_date', $date->format('Y-m-d'));
             $this->request->data('Registration.registration_datetime', $date->format('h:i A'));
-            
+
             // 如果後續動作是放入追蹤名單，就產生時間的預設值
             if ($hasFollowUp) {
                 $this->set('selected_notification', null);
@@ -117,10 +114,10 @@ class RegistrationsController extends AppController {
             }
         } else {
             // 合併門診日期及門診時間
-            $registration_time = $this->request->data['Registration']['registration_date'] . ' ' . 
-                                date('H:i:s', strtotime($this->request->data['Registration']['registration_datetime']));
-            $further_time = $this->request->data['Registration']['further_date'] . ' ' . 
-                                date('H:i:s', strtotime($this->request->data['Registration']['further_datetime']));
+            $registration_time = $this->request->data['Registration']['registration_date'] . ' ' .
+                    date('H:i:s', strtotime($this->request->data['Registration']['registration_datetime']));
+            $further_time = $this->request->data['Registration']['further_date'] . ' ' .
+                    date('H:i:s', strtotime($this->request->data['Registration']['further_datetime']));
             $this->request->data('Registration.registration_time', $registration_time);
             $this->request->data('Registration.further_time', $further_time);
             $date = new DateTime($registration_time);
@@ -149,7 +146,7 @@ class RegistrationsController extends AppController {
                         if (!empty($result)) {
                             $this->FollowUp->setComBackTime($result['FollowUp']['id'], $date->format('Y-m-d'));
                             CakeLog::write('debug', 'RegistrationsController.edit() - 更新門診資料(' . $id . ')連結的追蹤名單(' . $result['FollowUp']['id'] . ')的回診時間');
-                        }                        
+                        }
                     }
                     $this->Registration->Bill->set('registration_id', $id);
                     $this->Registration->Bill->save($this->request->data);
@@ -224,10 +221,10 @@ class RegistrationsController extends AppController {
                             // 沒有的話，就產生新的追蹤名單
                             $this->FollowUp->create();
                             $this->FollowUp->save(array('FollowUp' => array(
-                                'registration_id' => $id,
-                                'patient_id' => $this->request->data['Registration']['patient_id'],
-                                'follow_up_time' => $date2->format('Y-m-d')
-                            )));
+                                    'registration_id' => $id,
+                                    'patient_id' => $this->request->data['Registration']['patient_id'],
+                                    'follow_up_time' => $date2->format('Y-m-d')
+                                    )));
                             CakeLog::write('debug', 'RegistrationsController.edit() - 建立門診資料(' . $id . ')連結的追蹤名單(' . $this->FollowUp->id . ')');
                         }
                     }
@@ -251,7 +248,7 @@ class RegistrationsController extends AppController {
                     'class' => 'alert-success'
                 ));
                 CakeLog::write('debug', 'RegistrationsController.edit() - 更新門診資料(' . $id . ')');
-                
+
                 $this->redirect(array('action' => 'showDailyRegistration', $date->format('Y'), $date->format('m'), $date->format('d')));
             } else {
 
@@ -260,7 +257,7 @@ class RegistrationsController extends AppController {
                     'class' => 'alert-error'
                 ));
                 CakeLog::write('debug', 'RegistrationsController.edit() - 無法更新門診資料');
-                
+
                 $this->redirect(array('action' => 'showDailyRegistration', $date->format('Y'), $date->format('m'), $date->format('d')));
             }
         }
@@ -273,7 +270,7 @@ class RegistrationsController extends AppController {
         }
 
         $this->Registration->id = $id;
-        $date = new DateTime($this->Registration->field('registration_time'));        
+        $date = new DateTime($this->Registration->field('registration_time'));
 
         if (!$this->isLinkedToOther($id)) {
 
@@ -334,6 +331,7 @@ class RegistrationsController extends AppController {
     }
 
     public function search($parm) {
+        
     }
 
     private function isExistNextAppointment($id = null) {
@@ -342,7 +340,7 @@ class RegistrationsController extends AppController {
         // 若是預約，就把預約時間跟提醒方式塞進 view
         $hasNextAppointment = false;
         $nextAppointmentId = $this->Registration->getNextAppointmentId($id);
-        
+
         if (!is_null($nextAppointmentId)) {
 
             $this->Appointment->id = $nextAppointmentId;

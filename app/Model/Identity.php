@@ -21,11 +21,6 @@ class Identity extends AppModel {
         )
     );
 
-    // 傳回就診身分列表
-    public function getIdentityList() {
-        return $this->find('list', array('fields' => 'id, description'));
-    }
-
 }
 
 ?>

@@ -7,7 +7,7 @@ class BillStatsController extends AppController {
     public $components = array('Session');
 
     public function index() {
-
+        
     }
 
     public function showAnnualBillStat($y = null) {
@@ -40,10 +40,10 @@ class BillStatsController extends AppController {
         }
 
         $results = $this->Bill->query("CALL getMonthlyBillStat(" . $y . ", " . $m . ")");
-        $this->set('results', $results);        
+        $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
-        
+
         CakeLog::write('debug', 'BillStatsController.showMonthlyBillStat() - 顯示月門診收入');
     }
 
@@ -62,7 +62,7 @@ class BillStatsController extends AppController {
         if ($this->request->is('post')) {
             $y = $this->request->data['BillStat']['y']['year'];
             $m = $this->request->data['BillStat']['m']['month'];
-            $d = $this->request->data['BillStat']['d']['day'];            
+            $d = $this->request->data['BillStat']['d']['day'];
         }
 
         $results = $this->Bill->query("CALL getDailyBillStat(" . $y . ", " . $m . ", " . $d . ")");

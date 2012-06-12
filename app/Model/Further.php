@@ -21,11 +21,6 @@ class Further extends AppModel {
         )
     );
 
-    // 傳回後續動作列表
-    public function getFurtherActionList() {
-        return $this->find('list', array('fields' => 'id, description'));
-    }
-
     public function getFurtherId($id = null) {
         if (is_null($id)) {
             return null;
@@ -47,7 +42,7 @@ class Further extends AppModel {
             $this->query($str);
             return true;
         }
-    }    
+    }
 
 }
 

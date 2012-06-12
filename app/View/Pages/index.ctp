@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * PHP 5
@@ -18,5 +19,6 @@
 ?>
 
 <?php
-	$this->layout = 'welcome';
+
+$this->layout = 'welcome';
 ?>

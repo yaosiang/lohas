@@ -16,7 +16,6 @@ class PatientsController extends AppController {
             'limit' => 12
         );
         $this->set('patients', $this->paginate('Patient'));
-
     }
 
     public function add($registration_id = null, $patient_name = null) {
@@ -34,8 +33,7 @@ class PatientsController extends AppController {
         if ($this->request->is('post')) {
 
             // 如果掛號證字串不到 7 位數，填滿它
-            $this->request->data('Patient.serial_number', 
-                str_pad(trim($this->request->data['Patient']['serial_number']), 7, '0', STR_PAD_LEFT));                
+            $this->request->data('Patient.serial_number', str_pad(trim($this->request->data['Patient']['serial_number']), 7, '0', STR_PAD_LEFT));
 
             if ($this->Patient->save($this->request->data)) {
 
@@ -55,8 +53,8 @@ class PatientsController extends AppController {
                 $this->Session->setFlash('病患 ' . $this->Patient->field('name') . ' 資料已新增！', 'alert', array(
                     'plugin' => 'TwitterBootstrap',
                     'class' => 'alert-success'
-                ));                
-                
+                ));
+
                 $this->redirect(array('action' => 'index'));
             } else {
 
@@ -79,15 +77,14 @@ class PatientsController extends AppController {
         } else {
 
             // 如果掛號證字串不到 7 位數，填滿它
-            $this->request->data('Patient.serial_number', 
-                str_pad(trim($this->request->data['Patient']['serial_number']), 7, '0', STR_PAD_LEFT));                
+            $this->request->data('Patient.serial_number', str_pad(trim($this->request->data['Patient']['serial_number']), 7, '0', STR_PAD_LEFT));
 
             if ($this->Patient->save($this->request->data)) {
 
                 $this->Session->setFlash('病患 ' . $this->Patient->field('name') . ' 資料已更新！', 'alert', array(
                     'plugin' => 'TwitterBootstrap',
                     'class' => 'alert-success'
-                )); 
+                ));
                 $this->redirect(array('action' => 'index'));
             } else {
 
@@ -124,15 +121,15 @@ class PatientsController extends AppController {
 
             $patients = $this->Patient->find('all', array(
                 'conditions' => array('Patient.name LIKE' => $this->request->data['Patient']['parm'])
-                ));
-    
+                    ));
+
             if (empty($patients)) {
 
                 $serial_number = str_pad($this->request->data['Patient']['parm'], 7, '0', STR_PAD_LEFT);
 
                 $patients = $this->Patient->find('all', array(
                     'conditions' => array('Patient.serial_number' => $serial_number)
-                    ));
+                        ));
 
                 if (!empty($patients)) {
                     $this->set('patients', $patients);
@@ -147,10 +144,10 @@ class PatientsController extends AppController {
         }
     }
 
-    private function csv_to_array($filename='', $delimiter=',') {
+    private function csv_to_array($filename = '', $delimiter = ',') {
 
         if (!file_exists($filename) || !is_readable($filename)) {
-            return false;            
+            return false;
         }
 
         $header = null;
@@ -158,10 +155,9 @@ class PatientsController extends AppController {
         if (($handle = fopen($filename, 'r')) !== false) {
             while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
                 if (!$header) {
-                    $header = $row;                    
-                }
-                else {
-                    $data[] = array_combine($header, $row);                    
+                    $header = $row;
+                } else {
+                    $data[] = array_combine($header, $row);
                 }
             }
             fclose($handle);
@@ -178,23 +174,23 @@ class PatientsController extends AppController {
         $d1_pieces = explode('-', $d1);
         $d2_pieces = explode('-', $d2);
 
-        if ((int)$d1_pieces[0] > (int)$d2_pieces[0]) {
+        if ((int) $d1_pieces[0] > (int) $d2_pieces[0]) {
             return 1;
         }
 
-        if ((int)$d1_pieces[0] < (int)$d2_pieces[0]) {
+        if ((int) $d1_pieces[0] < (int) $d2_pieces[0]) {
             return -1;
         }
 
-        if ((int)$d1_pieces[0] == (int)$d2_pieces[0]) {
-            if ((int)$d1_pieces[1] > (int)$d2_pieces[1]) {
+        if ((int) $d1_pieces[0] == (int) $d2_pieces[0]) {
+            if ((int) $d1_pieces[1] > (int) $d2_pieces[1]) {
                 return 1;
             } else {
                 return -1;
             }
         }
 
-        if ((int)$d1_pieces[0] == (int)$d2_pieces[0] && (int)$d1_pieces[1] == (int)$d2_pieces[1]) {
+        if ((int) $d1_pieces[0] == (int) $d2_pieces[0] && (int) $d1_pieces[1] == (int) $d2_pieces[1]) {
             return 0;
         }
     }
@@ -218,14 +214,14 @@ class PatientsController extends AppController {
         $na = array();
         $re = array();
         $da = array();
-        
+
         $count = 0;
 
         foreach ($files as $file) {
-            
+
             $file = new File($dir->pwd() . DS . $file);
             $data = $this->csv_to_array($dir->pwd() . DS . $file->name);
-        
+
             foreach ($data as $d) {
 
                 $key = array_search($d['姓名'], $totalPatientName);
@@ -233,7 +229,7 @@ class PatientsController extends AppController {
                 $count++;
 
                 // 修改診別
-                if (strcmp($d['診別'], '') != 0) {                    
+                if (strcmp($d['診別'], '') != 0) {
                     $no = Set::enum($d['診別'], array('早' => 0, '午' => 1, '晚' => 2));
                     if ($no == 0 || $no == 1 || $no == 2) {
                         $timeslot = $d['診別'];
@@ -244,13 +240,13 @@ class PatientsController extends AppController {
 
                 $time_slot_id = 0;
                 if (strcmp($d['診別'], '早') == 0) {
-                     $time_slot_id = 1;
+                    $time_slot_id = 1;
                 }
                 if (strcmp($d['診別'], '午') == 0) {
-                     $time_slot_id = 2;
-                }                    
+                    $time_slot_id = 2;
+                }
                 if (strcmp($d['診別'], '晚') == 0) {
-                     $time_slot_id = 3;
+                    $time_slot_id = 3;
                 }
 
                 // 建立門診記錄
@@ -262,17 +258,16 @@ class PatientsController extends AppController {
                 //         'patient_id' => $key,
                 //         'note' => $d['備註']
                 //     ));
-
                 // 建立就診身分
                 $identity_id = 0;
                 if (strrchr($d['身分'], '+')) {
                     $pieces = explode('+', $d['身分']);
                     foreach ($pieces as $p) {
                         if (strcmp($p, '健') == 0) {
-                            $identity_id = 1;                            
+                            $identity_id = 1;
                         }
                         if (strcmp($p, '自') == 0) {
-                            $identity_id = 2;     
+                            $identity_id = 2;
                         }
                         if (strcmp($p, '榮') == 0) {
                             $identity_id = 3;
@@ -282,7 +277,7 @@ class PatientsController extends AppController {
                         }
                         if (strcmp($p, '重') == 0) {
                             $identity_id = 5;
-                        }      
+                        }
                         if (strcmp($p, '殘') == 0) {
                             $identity_id = 6;
                         }
@@ -291,10 +286,10 @@ class PatientsController extends AppController {
                     }
                 } else {
                     if (strcmp($d['身分'], '健') == 0) {
-                        $identity_id = 1;                            
+                        $identity_id = 1;
                     }
                     if (strcmp($d['身分'], '自') == 0) {
-                        $identity_id = 2;     
+                        $identity_id = 2;
                     }
                     if (strcmp($d['身分'], '榮') == 0) {
                         $identity_id = 3;
@@ -304,10 +299,10 @@ class PatientsController extends AppController {
                     }
                     if (strcmp($d['身分'], '重') == 0) {
                         $identity_id = 5;
-                    }      
+                    }
                     if (strcmp($d['身分'], '殘') == 0) {
                         $identity_id = 6;
-                    } 
+                    }
                     // $str = 'INSERT INTO identities_registrations (registration_id, identity_id) VALUES (' . $this->Registration->id . ', ' . $identity_id  . ')';
                     // $this->Patient->query($str);  
                 }
@@ -335,11 +330,11 @@ class PatientsController extends AppController {
                         // $str = 'INSERT INTO furthers_registrations (registration_id, further_id) VALUES (' . $this->Registration->id .', 1)';
                         // $this->Patient->query($str);
                     }
-                    
+
                     if (strrchr($d['預約'], '月')) {
 
-                        $f = str_replace('月', '-', $d['預約']);                            
-                        
+                        $f = str_replace('月', '-', $d['預約']);
+
                         if (strrchr($f, '日')) {
                             $f = str_replace('日', '', $f);
                         }
@@ -359,7 +354,7 @@ class PatientsController extends AppController {
                 }
 
                 if (strcmp($d['追蹤'], '') != 0) {
-                    
+
                     if (strrchr($d['追蹤'], '/')) {
 
                         $r = str_replace('/', '-', $d['追蹤']);
@@ -377,8 +372,8 @@ class PatientsController extends AppController {
 
                     if (strrchr($d['追蹤'], '月')) {
 
-                        $r = str_replace('月', '-', $d['追蹤']);                            
-                        
+                        $r = str_replace('月', '-', $d['追蹤']);
+
                         if (strrchr($r, '日')) {
                             $r = str_replace('日', '', $r);
                         }
@@ -400,7 +395,7 @@ class PatientsController extends AppController {
                         //    'patient_id' => $key,
                         //    'follow_up_time' => $r
                         //    ));                        
-                    }                                              
+                    }
                 }
 
                 if (strcmp($d['追蹤'], '') == 0 && strcmp($d['預約'], '') == 0) {
@@ -412,57 +407,52 @@ class PatientsController extends AppController {
             }
         }
 
-        for ($i = 1; $i <= count($totalPatientName); $i++) {            
-            
+        for ($i = 1; $i <= count($totalPatientName); $i++) {
+
             $k = array_keys($na, $totalPatientName[$i]);
-            
+
             for ($j = 0; $j < count($k); $j++) {
-                
-                echo $fi[$k[$j]] . ' | ' . $na[$k[$j]] . ' | '. $re[$k[$j]] . ' | ' . $da[$k[$j]] . '<br />';
+
+                echo $fi[$k[$j]] . ' | ' . $na[$k[$j]] . ' | ' . $re[$k[$j]] . ' | ' . $da[$k[$j]] . '<br />';
 
                 if (strcmp($re[$k[$j]], '追蹤') == 0) {
-                    
-                    if (($j+1) != count($k)) {
-                        
-                //         $registration_count = $this->Registration->find('count', array('conditions' => array(
-                //             'Registration.patient_id =' => $i,
-                //             'Registration.registration_time = ' => $fi[$k[$j]]
-                //             )));
 
-                //         if ($registration_count != 1) {
+                    if (($j + 1) != count($k)) {
 
-                //             $registration_id_list = $this->Registration->find('list', array(
-                //                 'fields' => 'id',
-                //                 'conditions' => array(
-                //                     'Registration.patient_id =' => $i,
-                //                     'Registration.registration_time = ' =>$fi[$k[$j]]
-                //                 )));
-
-                //             foreach ($registration_id_list as $r_id) {
-                //                 $result = $this->Patient->query('SELECT further_id FROM furthers_registrations WHERE registration_id = ' . $r_id);
-                //                 if ($result[0]['furthers_registrations']['further_id'] == 2) {
-                //                     $follow_up_id = $this->FollowUp->field('id', array(
-                //                         'FollowUp.patient_id =' => $i,
-                //                         'FollowUp.registration_id = ' => $r_id
-                //                         ));
-                //                     $this->FollowUp->id = $follow_up_id;
-                //                     $this->FollowUp->saveField('come_back_time', $fi[$k[$j+1]]);
-                //                 }
-                //             }
-                //         } else {
-                //             $registration_id = $this->Registration->field('id', array(
-                //                     'Registration.patient_id =' => $i,
-                //                     'Registration.registration_time = ' =>$fi[$k[$j]]
-                //                 ));
-
-                //             $follow_up_id = $this->FollowUp->field('id', array(
-                //                 'FollowUp.patient_id =' => $i,
-                //                 'FollowUp.registration_id = ' => $registration_id
-                //                 ));
-                //             $this->FollowUp->id = $follow_up_id;
-                //             $this->FollowUp->saveField('come_back_time', $fi[$k[$j+1]]);
-                //         }
-
+                        //         $registration_count = $this->Registration->find('count', array('conditions' => array(
+                        //             'Registration.patient_id =' => $i,
+                        //             'Registration.registration_time = ' => $fi[$k[$j]]
+                        //             )));
+                        //         if ($registration_count != 1) {
+                        //             $registration_id_list = $this->Registration->find('list', array(
+                        //                 'fields' => 'id',
+                        //                 'conditions' => array(
+                        //                     'Registration.patient_id =' => $i,
+                        //                     'Registration.registration_time = ' =>$fi[$k[$j]]
+                        //                 )));
+                        //             foreach ($registration_id_list as $r_id) {
+                        //                 $result = $this->Patient->query('SELECT further_id FROM furthers_registrations WHERE registration_id = ' . $r_id);
+                        //                 if ($result[0]['furthers_registrations']['further_id'] == 2) {
+                        //                     $follow_up_id = $this->FollowUp->field('id', array(
+                        //                         'FollowUp.patient_id =' => $i,
+                        //                         'FollowUp.registration_id = ' => $r_id
+                        //                         ));
+                        //                     $this->FollowUp->id = $follow_up_id;
+                        //                     $this->FollowUp->saveField('come_back_time', $fi[$k[$j+1]]);
+                        //                 }
+                        //             }
+                        //         } else {
+                        //             $registration_id = $this->Registration->field('id', array(
+                        //                     'Registration.patient_id =' => $i,
+                        //                     'Registration.registration_time = ' =>$fi[$k[$j]]
+                        //                 ));
+                        //             $follow_up_id = $this->FollowUp->field('id', array(
+                        //                 'FollowUp.patient_id =' => $i,
+                        //                 'FollowUp.registration_id = ' => $registration_id
+                        //                 ));
+                        //             $this->FollowUp->id = $follow_up_id;
+                        //             $this->FollowUp->saveField('come_back_time', $fi[$k[$j+1]]);
+                        //         }
                     }
                 }
 
@@ -470,9 +460,9 @@ class PatientsController extends AppController {
                 // TODO!!!!
                 if (strcmp($re[$k[$j]], '預約') == 0) {
 
-                    if (($j+1) != count($k)) {   
+                    if (($j + 1) != count($k)) {
 
-                        if (strcmp($da[$k[$j]], date('Y-n-j', strtotime($fi[$k[$j+1]]))) == 0) {
+                        if (strcmp($da[$k[$j]], date('Y-n-j', strtotime($fi[$k[$j + 1]]))) == 0) {
                             // $this->Appointment->create();
                             // $this->Appointment->save(array(
                             //    'appointment_time' => $da[$k[$j]],
@@ -490,11 +480,9 @@ class PatientsController extends AppController {
                             //    ));
                         }
                     }
-
                 }
-
             }
-        } 
+        }
     }
 
 }

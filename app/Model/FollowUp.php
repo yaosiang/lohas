@@ -27,13 +27,13 @@ class FollowUp extends AppModel {
         ),
         'Patient' => array(
             'className' => 'Patient'
-        )        
+        )
     );
 
     public function getFollowUpId($registrationId) {
         $result = $this->findByRegistrationId($registrationId, array('id'));
         return $result['FollowUp']['id'];
-    }    
+    }
 
     public function setComBackTime($followUpId, $comeBackTime) {
         if (is_null($comeBackTime)) {
@@ -42,7 +42,7 @@ class FollowUp extends AppModel {
             $str = "UPDATE follow_up SET come_back_time = '" . $comeBackTime . "' WHERE id = " . $followUpId;
             $this->query($str);
             return true;
-        }        
+        }
     }
 
 }

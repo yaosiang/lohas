@@ -13,7 +13,7 @@ class Registration extends AppModel {
             'rule' => 'numeric',
             'message' => 'Numbers only',
             'allowEmpty' => true
-        ),        
+        ),
         'patient_id' => array(
             'rule' => 'numeric',
             'message' => 'Numbers only',
@@ -33,7 +33,7 @@ class Registration extends AppModel {
         'TimeSlot' => array(
             'className' => 'TimeSlot',
             'foreignKey' => 'time_slot_id'
-        )        
+        )
     );
     public $hasOne = array(
         'Bill' => array(
@@ -129,18 +129,6 @@ class Registration extends AppModel {
             return true;
         }
     }
-
-    // public function getNextAppointmentRegistrationId($id = null) {
-    //     if (is_null($id)) {
-    //         return null;
-    //     } else {
-    //         $result = $this->query("SELECT registration_id FROM appointments_registrations WHERE appointment_id = " . $id);
-    //         if (!empty($result)) {
-    //             $nextRegistrationId = $result[0]['appointments_registrations']['registration_id'];
-    //             return $nextRegistrationId;
-    //         }
-    //     }
-    // }
 
 }
 
