@@ -36,7 +36,7 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
         echo $this->Form->create('Registration', array('class' => 'well form-search pull-right', 'action' => 'search'));
         echo $this->Form->input('parm', array(
             'type' => 'text',
-            'placeholder' => '請輸入姓名',
+            'placeholder' => '請輸入掛號証',
             'append' => array('找門診', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
         ));
         echo $this->Form->end();
@@ -73,7 +73,10 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
     <?php foreach ($results as $result): ?>
         <tr>
             <td><?php echo $result['time_slots']['time_slot']; ?></td>
-            <td><?php echo $this->Time->format('h:i A', $result['registrations']['registration_time']); ?></td>
+            <td>
+                <?php echo $this->Time->format('h:i A', $result['registrations']['registration_time']); 
+                ?>
+            </td>
             <td><?php echo $result['registrations']['patient_name']; ?></td>
             <td>
                 <?php

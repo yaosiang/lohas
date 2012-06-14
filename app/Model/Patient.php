@@ -3,6 +3,11 @@
 class Patient extends AppModel {
 
     public $validate = array(
+        'nickname' => array(
+            'rule' => array('maxLength', '140'),
+            'message' => '最大不能超過 140 個字',
+            'allowEmpty' => true
+        ),
         'serial_number' => array(
             'minLength' => array(
                 'rule' => array('minLength', '7'),

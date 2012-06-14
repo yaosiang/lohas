@@ -338,7 +338,23 @@ class RegistrationsController extends AppController {
         $this->redirect(array('action' => 'showDailyRegistration', $date->format('Y'), $date->format('m'), $date->format('d')));
     }
 
-    public function search($parm) {
+    public function search() {
+
+        $this->set('title_for_layout', '心樂活診所 - 門診資料');
+
+        if (!is_null($this->request->data['Registration']['parm'])) {
+
+            $sn = $this->request->data['Registration']['parm'];
+            $results = $this->Registration->query("CALL getDailyRegistrationBySerialNumber('" . $sn . "')");
+
+            if (empty($results)) {
+                $this->set('results', null);
+            } else {
+                $this->set('results', $results);
+            }
+        } else {
+            $this->set('results', null);
+        }
     }
 
     private function isExistNextAppointment($id = null) {

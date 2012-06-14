@@ -1,31 +1,20 @@
 <?php
 
-/**
- * Export all member records in .xls format
- * with the help of the xlsHelper
- */
-//input the export file name
-$this->Xls->setHeader('當日簡訊提醒名單_' . $year . '-' . $month . '-' . $day);
+	setlocale(LC_TIME, "zh_TW");
 
-$this->Xls->addXmlHeader();
-$this->Xls->setWorkSheetName('DailyCallList');
+    $this->layout = 'ajax';
+    $csv = null;
 
-//1st row for columns name
-$this->Xls->openRow();
-$this->Xls->writeString('預約時間');
-$this->Xls->writeString('聯絡姓名');
-$this->Xls->writeString('聯絡電話');
-$this->Xls->closeRow();
+    foreach ($results AS $result) {
+        $csv .= $result['appointments']['contact_phone'];
+        $csv .= ',' . $result['appointments']['contact_name'];
+        $csv .= ',' .  strftime('%p', strtotime($result['appointments']['appointment_time']));
+        $csv .= ',' . $this->Time->format('h:i', $result['appointments']['appointment_time']);
+        $csv .= "\n";
+    }
 
-//rows for data
-foreach ($results as $result):
-    $this->Xls->openRow();
-    $this->Xls->writeString($this->Time->format('Y-m-d H:i', $result['appointments']['appointment_time']));
-    $this->Xls->writeString($result['appointments']['contact_name']);
-    $this->Xls->writeString($result['appointments']['contact_phone']);
-    $this->Xls->closeRow();
-endforeach;
+    header("Content-type: application/vnd.ms-excel");
+    header("Content-disposition: csv;filename = sms_" . $date . ".csv; size = " . strlen($csv));
+    echo $csv;
 
-$this->Xls->addXmlFooter();
-exit();
 ?> 

@@ -46,7 +46,7 @@
 <div class="row-fluid">
     <div class="span10">
         <div class="btn-group">
-            <?php echo $this->Html->link('匯出檔案', '/call_lists/downloadCallList/' . $year . '/' . $month . '/' . $day, array('class' => 'btn pull-left', 'icon' => 'download')); ?>
+            <?php echo $this->Html->link('匯出簡訊專用CSV檔', '/call_lists/downloadCallList/' . $year . '/' . $month . '/' . $day, array('class' => 'btn pull-left', 'icon' => 'download')); ?>
         </div>
     </div>
 </div>
