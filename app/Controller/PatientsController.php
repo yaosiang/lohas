@@ -33,6 +33,10 @@ class PatientsController extends AppController {
             $this->set('name', null);
         }
 
+        if (!is_null($registration_id)) {
+            $this->request->data('Registration.id', $registration_id);
+        }
+
         if ($this->request->is('post')) {
 
             // 如果掛號證字串不到 7 位數，填滿它
@@ -41,16 +45,15 @@ class PatientsController extends AppController {
             if ($this->Patient->save($this->request->data)) {
 
                 // 有指定 Registration id 時，需要更改門診資料
-                if (!is_null($registration_id)) {
+                if (!is_null($this->request->data['Registration']['id'])) {
 
                     $this->loadModel('Registration');
-                    $data = array(
-                        'id' => $registration_id,
-                        'patient_id' => $this->Patient->id,
-                        'patient_name' => $this->Patient->field('name')
-                    );
-                    $this->Registration->save($data, array('fields' => 'id, patient_id, patient_name'));
-                    $this->redirect(array('controller' => 'Registrations', 'action' => 'index'));
+                    $this->Registration->id = $this->request->data['Registration']['id'];
+                    $this->Registration->saveField('patient_id', $this->Patient->id);
+                    $this->Registration->saveField('patient_name', $this->Patient->field('name'));
+
+                    $date = new DateTime($this->Registration->field('registration_time'));
+                    $this->redirect(array('controller' => 'Registrations', 'action' => 'showDailyRegistration', $date->format('Y'), $date->format('m'), $date->format('d')));
                 }
 
                 $this->Session->setFlash('病患 ' . $this->Patient->field('name') . ' 資料已新增！', 'alert', array(

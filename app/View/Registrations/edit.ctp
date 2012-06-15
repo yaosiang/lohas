@@ -134,13 +134,13 @@
     ?>
 
     <div class="form-actions">
-    <?php
-    echo $this->Form->submit('儲存修改資料', array(
-        'div' => false,
-        'class' => 'btn btn-primary',
-    ));
-    echo $this->Form->button('取消', array('type' => 'reset', 'class' => 'btn'));
-    ?>
+        <?php
+        echo $this->Form->submit('儲存修改資料', array(
+            'div' => false,
+            'class' => 'btn btn-primary',
+        ));
+        echo $this->Form->button('取消', array('type' => 'reset', 'class' => 'btn'));
+        ?>
     </div>
 
 </fieldset>

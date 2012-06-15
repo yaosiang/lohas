@@ -60,7 +60,7 @@ class AppointmentContactsController extends AppController {
                     'plugin' => 'TwitterBootstrap',
                     'class' => 'alert-error'
                 ));
-                CakeLog::write('debug', 'AppointmentContactsController.edit() - 無法更新關懷名單');
+                CakeLog::write('debug', 'AppointmentContactsController.edit() - 無法更新關懷名單(' . $this->AppointmentContact->id . ')');
             }
         }
     }

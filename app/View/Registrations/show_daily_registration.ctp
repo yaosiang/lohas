@@ -21,6 +21,7 @@ $code =
                 }
             });";
 echo $this->Html->scriptBlock($code, array('inline' => false));
+$count = 1;
 ?>
 
 <div class="row-fluid">
@@ -39,6 +40,7 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
             'placeholder' => '請輸入掛號証',
             'append' => array('找門診', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
         ));
+        echo $this->Html->para(null, '請輸入掛號証');
         echo $this->Form->end();
         ?>
     </div>    
@@ -52,6 +54,7 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
 
 <table class="table table-striped">
     <thead>
+    <th>序號</th>
     <th>診別</th>
     <th>時間</th>
     <th>病患姓名</th>
@@ -72,6 +75,7 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
 <tbody>
     <?php foreach ($results as $result): ?>
         <tr>
+            <td><?php echo $count++; ?></td>
             <td><?php echo $result['time_slots']['time_slot']; ?></td>
             <td>
                 <?php echo $this->Time->format('h:i A', $result['registrations']['registration_time']); 

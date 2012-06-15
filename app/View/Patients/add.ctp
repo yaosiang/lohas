@@ -41,6 +41,8 @@
         'type' => 'textarea',
         'class' => 'input-xlarge'
     ));
+
+    echo $this->Form->input('Registration.id', array('type' => 'hidden'));
     ?>
 
     <div class="form-actions">

@@ -264,7 +264,7 @@ class RegistrationsController extends AppController {
                     'plugin' => 'TwitterBootstrap',
                     'class' => 'alert-error'
                 ));
-                CakeLog::write('debug', 'RegistrationsController.edit() - 無法更新門診資料');
+                CakeLog::write('debug', 'RegistrationsController.edit() - 無法更新門診資料(' . $id . ')');
 
                 $this->redirect(array('action' => 'showDailyRegistration', $date->format('Y'), $date->format('m'), $date->format('d')));
             }
@@ -332,7 +332,7 @@ class RegistrationsController extends AppController {
                 'plugin' => 'TwitterBootstrap',
                 'class' => 'alert-error'
             ));
-            CakeLog::write('debug', 'RegistrationsController.delete() - 門診資料與其它記錄已連結，不能刪除');
+            CakeLog::write('debug', 'RegistrationsController.delete() - 門診資料(' . $id . ')與其它記錄已連結，不能刪除');
         }
 
         $this->redirect(array('action' => 'showDailyRegistration', $date->format('Y'), $date->format('m'), $date->format('d')));

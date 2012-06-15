@@ -31,8 +31,6 @@ class FollowUpController extends AppController {
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
-
-        CakeLog::write('debug', 'FollowUpController.downloadMonthlyFollowUp() - 匯出月追蹤名單');
     }
 
     public function edit($id = null, $registrationId = null) {
@@ -70,7 +68,7 @@ class FollowUpController extends AppController {
                     'plugin' => 'TwitterBootstrap',
                     'class' => 'alert-error'
                 ));
-                CakeLog::write('debug', 'FollowUpController.edit() - 無法更新追蹤名單');
+                CakeLog::write('debug', 'FollowUpController.edit() - 無法更新追蹤名單(' . $this->FollowUp->id . ')');
             }
         }
     }

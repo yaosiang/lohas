@@ -10,6 +10,7 @@
             'placeholder' => '姓名 or 掛號證',
             'append' => array('找病患', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
         ));
+        echo $this->Html->para(null, '請輸入姓名 or 掛號証');
         echo $this->Form->end();
         ?>
     </div>    

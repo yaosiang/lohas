@@ -21,6 +21,7 @@ $code =
                 }
             });";
 echo $this->Html->scriptBlock($code, array('inline' => false));
+$count = 1;
 ?>
 
 <div class="row-fluid">
@@ -36,9 +37,10 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
         echo $this->Form->create('Appointment', array('class' => 'well form-search pull-right', 'action' => 'search'));
         echo $this->Form->input('parm', array(
             'type' => 'text',
-            'placeholder' => '請輸入姓名',
+            'placeholder' => '請輸入聯絡姓名',
             'append' => array('找預約', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
         ));
+        echo $this->Html->para(null, '搜尋功能還不能用喔！');
         echo $this->Form->end();
         ?>
     </div>        
@@ -52,6 +54,7 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
 
 <table class="table table-striped">
     <thead>
+    <th>序號</th>
     <th>時間</th>
     <th>聯絡姓名</th>
     <th>聯絡電話</th>
@@ -66,6 +69,7 @@ echo $this->Html->scriptBlock($code, array('inline' => false));
 <tbody>
     <?php foreach ($results as $result): ?>
         <tr>
+            <td><?php echo $count++; ?></td>
             <td><?php echo $this->Time->format('h:i A', $result['appointments']['appointment_time']); ?></td>
             <td><?php echo $result['appointments']['contact_name']; ?></td>
             <td><?php echo $result['appointments']['contact_phone']; ?></td>

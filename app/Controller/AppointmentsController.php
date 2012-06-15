@@ -8,10 +8,7 @@ class AppointmentsController extends AppController {
 
     public function showDailyAppointment($y = null, $m = null, $d = null) {
 
-        $date = date("Y-m-d", mktime(0, 0, 0, 
-                (is_null($m) ? $m = date("m") : $m), 
-                (is_null($d) ? $d = date("d") : $d), 
-                (is_null($y) ? $y = date("Y") : $y)
+        $date = date("Y-m-d", mktime(0, 0, 0, (is_null($m) ? $m = date("m") : $m), (is_null($d) ? $d = date("d") : $d), (is_null($y) ? $y = date("Y") : $y)
                 ));
         $results = $this->Appointment->query("CALL getDailyAppointment('" . $date . "')");
         $this->set('results', $results);
@@ -32,8 +29,8 @@ class AppointmentsController extends AppController {
             $patient_id = null;
 
             // 合併門診日期及門診時間
-            $appointment_time = $this->request->data['Appointment']['appointment_date'] . ' ' . 
-                                date('H:i:s', strtotime($this->request->data['Appointment']['appointment_datetime']));
+            $appointment_time = $this->request->data['Appointment']['appointment_date'] . ' ' .
+                    date('H:i:s', strtotime($this->request->data['Appointment']['appointment_datetime']));
             $this->request->data('Appointment.appointment_time', $appointment_time);
             $date = new DateTime($this->request->data['Appointment']['appointment_time']);
 
@@ -51,6 +48,7 @@ class AppointmentsController extends AppController {
                     $patient_id = $result['Patient']['id'];
                     $this->request->data('Appointment.contact_name', $result['Patient']['name']);
                     $this->request->data('Appointment.contact_phone', $result['Patient']['phone']);
+
                     CakeLog::write('debug', 'AppointmentsController.add() - 掛號證 ' . $serial_number . ' 存在，取出 id 與病患姓名');
                 }
             }
@@ -62,25 +60,28 @@ class AppointmentsController extends AppController {
             // 預約人數可多於一人，同時建立預約與門診陣列資料
             $contact_number = intval($this->request->data['Appointment']['contact_number']) + 1;
             for ($i = 0; $i < $contact_number; $i++) {
+                // 準備預約記錄的資料
                 $appointment_data[] = $this->request->data;
                 if ($i != 0) {
-                    $str = '與『' . $this->request->data['Appointment']['contact_name'] . '』同行';
+                    $str = '與「' . $this->request->data['Appointment']['contact_name'] . '」同行';
                     $appointment_data[$i]['Appointment']['contact_name'] = $str;
                     $appointment_data[$i]['Appointment']['note'] = '';
                     $patient_id = null;
                 }
+                // 準備門診資料的資料
                 $registration_data[] = array('Registration' => array(
                         'registration_time' => $appointment_data[$i]['Appointment']['appointment_time'],
                         'time_slot_id' => $this->TimeSlot->getTimeSlot($appointment_data[$i]['Appointment']['appointment_time']),
                         'patient_name' => $appointment_data[$i]['Appointment']['contact_name'],
                         'patient_phone' => $appointment_data[$i]['Appointment']['contact_phone'],
                         'patient_id' => $patient_id
-                ));
+                        ));
 
                 $this->Appointment->create();
                 $this->Registration->create();
-                if ($this->Appointment->save($appointment_data[$i]) && 
-                    $this->Registration->save($registration_data[$i])) {
+
+                if ($this->Appointment->save($appointment_data[$i]) &&
+                        $this->Registration->save($registration_data[$i])) {
 
                     CakeLog::write('debug', 'AppointmentsController.add() - 建立預約記錄(' . $this->Appointment->id . ')');
                     CakeLog::write('debug', 'AppointmentsController.add() - 建立預約記錄(' . $this->Appointment->id . ')連結的門診資料(' . $this->Registration->id . ')');
@@ -117,22 +118,19 @@ class AppointmentsController extends AppController {
         // 是否顯示關懷時間與關懷結果
         $isNoShow = $this->isNoShow($id);
         $this->set('isNoShow', $isNoShow);
-        CakeLog::write('debug', 'AppointmentsController.edit() - 是否顯示關懷欄位？ ' . $isNoShow);
 
         // 是否凍結聯絡姓名
         $isNameFixed = $this->isNameFixed($id);
         $this->set('isNameFixed', $isNameFixed);
-        CakeLog::write('debug', 'AppointmentsController.edit() - 是否凍結名字欄位？ ' . $isNameFixed);
 
         $isLinked = $this->isLinkedToOther($id);
-        CakeLog::write('debug', 'AppointmentsController.edit() - 連結門診有無資料？ ' . $isLinked);
 
         if ($this->request->is('get')) {
 
             $this->request->data = $this->Appointment->read();
 
             $this->request->data('Appointment.is_no_show', (($isNoShow) ? '1' : '0'));
-            
+
             $date = new DateTime($this->request->data['Appointment']['appointment_time']);
             $this->set('appointment_date', $date->format('Y-m-d'));
             $this->set('appointment_datetime', $date->format('h:i A'));
@@ -140,8 +138,8 @@ class AppointmentsController extends AppController {
             $this->request->data('Appointment.appointment_datetime', $date->format('h:i A'));
         } else {
             // 合併預約日期及預約時間
-            $appointment_time = $this->request->data['Appointment']['appointment_date'] . ' ' . 
-                                date('H:i:s', strtotime($this->request->data['Appointment']['appointment_datetime']));
+            $appointment_time = $this->request->data['Appointment']['appointment_date'] . ' ' .
+                    date('H:i:s', strtotime($this->request->data['Appointment']['appointment_datetime']));
             $this->request->data('Appointment.appointment_time', $appointment_time);
             $date = new DateTime($appointment_time);
 
@@ -156,7 +154,7 @@ class AppointmentsController extends AppController {
                         $this->Registration->id = $this->Appointment->getNextRegistrationId($id);
                         $this->Registration->saveField('registration_time', $this->request->data['Appointment']['appointment_time']);
                         $this->Registration->saveField('patient_name', $this->request->data['Appointment']['contact_name']);
-                        CakeLog::write('debug', 'AppointmentsController.edit() - 更新預約記錄(' . $id . ')連結的門診資料(' . $this->Registration->id .')');
+                        CakeLog::write('debug', 'AppointmentsController.edit() - 更新預約記錄(' . $id . ')連結的門診資料(' . $this->Registration->id . ')');
                     }
 
                     // 有勾選『爽約』
@@ -174,12 +172,19 @@ class AppointmentsController extends AppController {
                         } else {
                             // 之前沒有選過『爽約』，新增至關懷清單
                             $this->AppointmentContact->create();
-                            $data = array(
-                                'AppointmentContact' => array(
-                                    'appointment_id' => $id,
-                                    'contact_time' => date('Y-m-d'),
-                                    'contact_result' => $this->request->data['AppointmentContact']['contact_result']
-                                    ));
+                            if (!empty($this->request->data['AppointmentContact']['contact_result'])) {
+                                $data = array(
+                                    'AppointmentContact' => array(
+                                        'appointment_id' => $id,
+                                        'contact_time' => date('Y-m-d'),
+                                        'contact_result' => $this->request->data['AppointmentContact']['contact_result']
+                                        ));
+                            } else {
+                                $data = array(
+                                    'AppointmentContact' => array(
+                                        'appointment_id' => $id
+                                        ));
+                            }
                             $this->AppointmentContact->save($data);
                             CakeLog::write('debug', 'AppointmentsController.edit() - 建立預約記錄(' . $id . ')連結的關懷清單(' . $this->AppointmentContact->id . ')');
 
@@ -187,10 +192,10 @@ class AppointmentsController extends AppController {
                             $nextRegistrationId = $this->Appointment->getNextRegistrationId($id);
                             // 先刪除預約記錄與門診資料的關係
                             $this->Appointment->deleteNextRegistration($nextRegistrationId, $id);
-                            CakeLog::write('debug', 'AppointmentsController.edit() - 刪除預約記錄(' . $id . ')與預約記錄連結的門診資料(' . $nextRegistrationId .')的關係');
+                            CakeLog::write('debug', 'AppointmentsController.edit() - 刪除預約記錄(' . $id . ')與預約記錄連結的門診資料(' . $nextRegistrationId . ')的關係');
                             // 最後刪除門診資料
                             $this->Registration->delete($nextRegistrationId);
-                            CakeLog::write('debug', 'AppointmentsController.edit() - 刪除預約記錄(' . $id . ')連結的門診資料(' . $nextRegistrationId .')');
+                            CakeLog::write('debug', 'AppointmentsController.edit() - 刪除預約記錄(' . $id . ')連結的門診資料(' . $nextRegistrationId . ')');
                         }
                     }
 
@@ -204,7 +209,7 @@ class AppointmentsController extends AppController {
                 } else {
 
                     $this->Session->setFlash('預約資料不能更新！');
-                    CakeLog::write('debug', 'AppointmentsController.edit() - 預約資料不能更新');
+                    CakeLog::write('debug', 'AppointmentsController.edit() - 預約資料(' . $id . ')不能更新');
                 }
             } else {
 
@@ -226,7 +231,7 @@ class AppointmentsController extends AppController {
         }
 
         $this->Appointment->id = $id;
-        $date = new DateTime($this->Appointment->field('appointment_time')); 
+        $date = new DateTime($this->Appointment->field('appointment_time'));
 
         if (!$this->isLinkedToOther($id)) {
 
@@ -235,7 +240,7 @@ class AppointmentsController extends AppController {
             if (!is_null($previousRegistrationId)) {
                 // 先刪除預約記錄與某次門診記錄的關係
                 $this->Appointment->deletePreviousRegistration($previousRegistrationId, $id);
-                CakeLog::write('debug', 'AppointmentsController.delete() - 刪除預約記錄(' . $id .')與預約記錄連結的前次門診資料(' . $previousRegistrationId . ')的關係');
+                CakeLog::write('debug', 'AppointmentsController.delete() - 刪除預約記錄(' . $id . ')與預約記錄連結的前次門診資料(' . $previousRegistrationId . ')的關係');
                 $this->loadModel('Further');
                 // 取得該次門診的後續動作 id
                 $furtherId = $this->Further->getFurtherId($previousRegistrationId);
@@ -275,13 +280,29 @@ class AppointmentsController extends AppController {
                 'plugin' => 'TwitterBootstrap',
                 'class' => 'alert-error'
             ));
-            CakeLog::write('debug', 'AppointmentsController.delete() - 預約資料與其它記錄已連結，不能刪除');
+            CakeLog::write('debug', 'AppointmentsController.delete() - 預約資料(' . $id . ')與其它記錄已連結，不能刪除');
         }
 
         $this->redirect(array('action' => 'showDailyAppointment', $date->format('Y'), $date->format('m'), $date->format('d')));
     }
 
-    public function search($parm) {
+    public function search() {
+
+        $this->set('title_for_layout', '心樂活診所 - 預約資料');
+
+        if (!is_null($this->request->data['Appointment']['parm'])) {
+
+            $name = $this->request->data['Appointment']['parm'];
+            $results = $this->Appointment->query("CALL getDailyAppointmentByContactName('" . $name . "')");
+
+            if (empty($results)) {
+                $this->set('results', null);
+            } else {
+                $this->set('results', $results);
+            }
+        } else {
+            $this->set('results', null);
+        }
     }
 
     private function isLinkedToOther($id = null) {

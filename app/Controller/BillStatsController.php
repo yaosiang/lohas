@@ -20,8 +20,6 @@ class BillStatsController extends AppController {
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('title_for_layout', '心樂活診所 - 門診收入');
-
-        CakeLog::write('debug', 'BillStatsController.showAnnualBillStat() - 顯示年門診收入');
     }
 
     public function downloadAnnualBillStat($y = null) {
@@ -29,8 +27,6 @@ class BillStatsController extends AppController {
         $results = $this->Bill->query("CALL getAnnualBillStat(" . $y . ")");
         $this->set('results', $results);
         $this->set('year', $y);
-
-        CakeLog::write('debug', 'BillStatsController.downloadAnnualBillStat() - 產生年門診收入的 Excel 檔');
     }
 
     public function showMonthlyBillStat($y = null, $m = null) {
@@ -45,8 +41,6 @@ class BillStatsController extends AppController {
         $this->set('year', $y);
         $this->set('month', $m);
         $this->set('title_for_layout', '心樂活診所 - 門診收入');
-
-        CakeLog::write('debug', 'BillStatsController.showMonthlyBillStat() - 顯示月門診收入');
     }
 
     public function downloadMonthlyBillStat($y = null, $m = null) {
@@ -55,8 +49,6 @@ class BillStatsController extends AppController {
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
-
-        CakeLog::write('debug', 'BillStatsController.downloadMonthlyBillStat() - 產生月門診收入的 Excel 檔');
     }
 
     public function showDailyBillStat($y = null, $m = null, $d = null) {
@@ -73,8 +65,6 @@ class BillStatsController extends AppController {
         $this->set('month', $m);
         $this->set('day', $d);
         $this->set('title_for_layout', '心樂活診所 - 門診收入');
-
-        CakeLog::write('debug', 'BillStatsController.showDailyBillStat() - 顯示日門診收入');
     }
 
     public function downloadDailyBillStat($y = null, $m = null, $d = null) {
@@ -84,8 +74,6 @@ class BillStatsController extends AppController {
         $this->set('year', $y);
         $this->set('month', $m);
         $this->set('day', $d);
-
-        CakeLog::write('debug', 'BillStatsController.downloadDailyBillStat() - 產生當日門診收入的 Excel 檔');
     }
 
 }

@@ -12,6 +12,7 @@
                 'type' => 'submit',
                 'class' => 'btn'
                 ));
+            echo $this->Html->para(null, '請輸入姓名 or 掛號証');
             echo $this->Form->end(); 
         ?>
     </div>    
