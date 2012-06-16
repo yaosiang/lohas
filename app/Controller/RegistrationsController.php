@@ -131,6 +131,9 @@ class RegistrationsController extends AppController {
             // 使用者透過 Post Method 進來，通常是使用者按下『更新門診』按鈕，此時要把輸入資料塞進資料庫裡
             if ($this->Registration->save($this->request->data)) {
 
+                // 更新門診時間，也要跟著修改診別
+                $this->Registration->saveField('time_slot_id', $this->TimeSlot->getTimeSlot($registration_time));
+
                 // 更新門診時間，上次預約記錄的預約時間也跟著更新
                 $previousAppointmentId = $this->Registration->getPreviousAppointmentId($id);
                 if (!is_null($previousAppointmentId)) {

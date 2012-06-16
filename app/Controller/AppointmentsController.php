@@ -154,6 +154,7 @@ class AppointmentsController extends AppController {
                         $this->Registration->id = $this->Appointment->getNextRegistrationId($id);
                         $this->Registration->saveField('registration_time', $this->request->data['Appointment']['appointment_time']);
                         $this->Registration->saveField('patient_name', $this->request->data['Appointment']['contact_name']);
+                        $this->Registration->saveField('time_slot_id', $this->TimeSlot->getTimeSlot($appointment_time));
                         CakeLog::write('debug', 'AppointmentsController.edit() - 更新預約記錄(' . $id . ')連結的門診資料(' . $this->Registration->id . ')');
                     }
 
