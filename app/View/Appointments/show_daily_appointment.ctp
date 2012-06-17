@@ -92,19 +92,6 @@ $count = 1;
 <tbody>
     <?php foreach ($results as $result): ?>
         <tr>
-            <td></td>
-            <td>Time</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
             <td><?php echo $count++; ?></td>
             <td><?php echo $this->Time->format('h:i A', $result['appointments']['appointment_time']); ?></td>
             <td><?php echo $result['appointments']['contact_name']; ?></td>
