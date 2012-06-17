@@ -33,7 +33,6 @@
         echo $this->Html->css('bootstrap.min');
         echo $this->Html->css('bootstrap-datepicker');
         echo $this->Html->css('bootstrap-timepicker');
-        echo $this->Html->css('bootstrap.min');
 
         echo $this->fetch('meta');
         echo $this->fetch('css');
@@ -80,49 +79,81 @@
                         <ul class="nav nav-list">
 
                             <li class="nav-header">一般行政作業</li>
-                            <li>
-                                <?php
+                            <?php
+                                if (preg_match("/\/lohas\/appointments\//", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
                                 echo $this->Html->link('預約記錄', '/appointments/showDailyAppointment', array('icon' => 'book'));
-                                ?>
+                            ?>
                             </li>
-                            <li>
-                                <?php
+                            <?php
+                                if (preg_match("/\/lohas\/registrations\//", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
                                 echo $this->Html->link('門診資料', '/registrations/showDailyRegistration', array('icon' => 'tasks'));
-                                ?>
+                            ?>
                             </li>
-                            <li>
-                                <?php
+                            <?php
+                                if (preg_match("/\/lohas\/patients/", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
                                 echo $this->Html->link('病患資料', '/patients', array('icon' => 'user'));
-                                ?>
+                            ?>
                             </li>
                             <li class="divider"></li>
                             <li class="nav-header">提醒事項作業</li>				
-                            <li>
+<!--                             <li>
                                 <?php
-                                echo $this->Html->link('預約關懷', '/appointment_contacts/showMonthlyAppointmentContact', array('icon' => 'fire'));
+                                //echo $this->Html->link('預約關懷', '/appointment_contacts/showMonthlyAppointmentContact', array('icon' => 'fire'));
                                 ?>
                             </li>
-                            <li>
-                                <?php
+ -->                            <li>
+                            <?php
+                                if (preg_match("/\/lohas\/follow_up/", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
                                 echo $this->Html->link('回診追蹤', '/follow_up/showMonthlyFollowUp', array('icon' => 'eye-open'));
-                                ?>
+                            ?>
                             </li>
-                            <li>
-                                <?php
+                            <?php
+                                if (preg_match("/\/lohas\/calllists/", $this->request->here) ||
+                                    preg_match("/\/lohas\/CallLists/", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
                                 echo $this->Html->link('簡訊提醒', '/calllists/showCallList', array('icon' => 'envelope'));
-                                ?>
+                            ?>
                             </li>
                             <li class="divider"></li>
                             <li class="nav-header">相關統計數據</li>							
-                            <li>
-                                <?php
-                                echo $this->Html->link('門診收入', '/billstats', array('icon' => 'briefcase'));
-                                ?>
+                            <?php
+                                if (preg_match("/\/lohas\/bill_stats/", $this->request->here) ||
+                                    preg_match("/\/lohas\/BillStats/", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
+                                echo $this->Html->link('門診收入', '/bill_stats', array('icon' => 'briefcase'));
+                            ?>
                             </li>
-                            <li>
-                                <?php
-                                echo $this->Html->link('初診統計', '/sourcestats', array('icon' => 'magnet'));
-                                ?>
+                            <?php
+                                if (preg_match("/\/lohas\/source_stats/", $this->request->here) ||
+                                    preg_match("/\/lohas\/SourceStats/", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
+                                echo $this->Html->link('初診統計', '/source_stats', array('icon' => 'magnet'));
+                            ?>
                             </li>
                         </ul>
                     </div>

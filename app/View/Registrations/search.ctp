@@ -35,6 +35,7 @@ if (!is_null($results)) {
         <thead>
         <th>序號</th>
         <th>日期</th>
+        <th>星期</th>
         <th>時間</th>
         <th>病患姓名</th>
         <th>掛號證</th>
@@ -53,12 +54,9 @@ if (!is_null($results)) {
     <?php foreach ($results as $result): ?>
             <tr>
                 <td><?php echo $count++; ?></td>
-                <td>
-        <?php echo $this->Time->format('Y-m-d', $result['registrations']['registration_time']); ?>
-                </td>
-                <td>
-        <?php echo $this->Time->format('h:i A', $result['registrations']['registration_time']); ?>
-                </td>
+                <td><?php echo $this->Time->format('Y-m-d', $result['registrations']['registration_time']); ?></td>
+                <td><?php echo $this->Time->format('N', $result['registrations']['registration_time']); ?></td>
+                <td><?php echo $this->Time->format('h:i A', $result['registrations']['registration_time']); ?></td>
                 <td><?php echo $result['registrations']['patient_name']; ?></td>
                 <td>
                     <?php

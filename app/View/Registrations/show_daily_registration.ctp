@@ -28,6 +28,24 @@ $count = 1;
     <div class="span8">
         <h1>
             <span id="regDate"><?php echo $year; ?>-<?php echo $month; ?>-<?php echo $day; ?></span>
+            <?php
+            $date = new DateTime($year . '-' . $month . '-' . $day);
+            if ($date->format('N') == 1) {
+                echo ' 星期一';
+            } elseif ($date->format('N') == 2) {
+                echo ' 星期二';
+            } elseif ($date->format('N') == 3) {
+                echo ' 星期三';
+            } elseif ($date->format('N') == 4) {
+                echo ' 星期四';
+            } elseif ($date->format('N') == 5) {
+                echo ' 星期五';
+            } elseif ($date->format('N') == 6) {
+                echo ' 星期六';
+            } else {
+                echo ' 星期天';
+            }
+            ?>            
             門診資料
             <?php echo $this->Html->link('', '#', array('class' => 'btn', 'icon' => 'calendar', 'id' => 'dp', 'data-date-format' => 'yyyy-mm-dd', 'data-date' => $year . '-' . $month . '-' . $day)); ?>
         </h1>
@@ -77,10 +95,7 @@ $count = 1;
         <tr>
             <td><?php echo $count++; ?></td>
             <td><?php echo $result['time_slots']['time_slot']; ?></td>
-            <td>
-                <?php echo $this->Time->format('h:i A', $result['registrations']['registration_time']); 
-                ?>
-            </td>
+            <td><?php echo $this->Time->format('h:i A', $result['registrations']['registration_time']); ?></td>
             <td><?php echo $result['registrations']['patient_name']; ?></td>
             <td>
                 <?php

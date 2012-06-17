@@ -28,22 +28,45 @@ $count = 1;
     <div class="span8">
         <h1>
             <span id="appDate"><?php echo $year; ?>-<?php echo $month; ?>-<?php echo $day; ?></span>
+            <?php
+            $date = new DateTime($year . '-' . $month . '-' . $day);
+            if ($date->format('N') == 1) {
+                echo ' 星期一';
+            } elseif ($date->format('N') == 2) {
+                echo ' 星期二';
+            } elseif ($date->format('N') == 3) {
+                echo ' 星期三';
+            } elseif ($date->format('N') == 4) {
+                echo ' 星期四';
+            } elseif ($date->format('N') == 5) {
+                echo ' 星期五';
+            } elseif ($date->format('N') == 6) {
+                echo ' 星期六';
+            } else {
+                echo ' 星期天';
+            }
+            ?>
             預約記錄
             <?php echo $this->Html->link('', '#', array('class' => 'btn', 'icon' => 'calendar', 'id' => 'dp', 'data-date-format' => 'yyyy-mm-dd', 'data-date' => $year . '-' . $month . '-' . $day)); ?>
         </h1>
     </div>
     <div class="span4">
         <?php
-        echo $this->Form->create('Appointment', array('class' => 'well form-search pull-right', 'action' => 'search'));
-        echo $this->Form->input('parm', array(
-            'type' => 'text',
-            'placeholder' => '請輸入聯絡姓名',
-            'append' => array('找預約', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
-        ));
-        echo $this->Html->para(null, '搜尋功能還不能用喔！');
-        echo $this->Form->end();
+        // echo $this->Form->create('Appointment', array('class' => 'well form-search pull-right', 'action' => 'search'));
+        // echo $this->Form->input('parm', array(
+        //     'type' => 'text',
+        //     'placeholder' => '請輸入聯絡姓名',
+        //     'append' => array('找預約', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
+        // ));
+        // echo $this->Html->para(null, '預約記錄的搜尋功能還不能用！');
+        // echo $this->Form->end();
         ?>
     </div>        
+</div>
+
+<div class="row-fluid">
+    <div class="span12">
+    </div>
 </div>
 
 <div class="btn-group">
@@ -68,6 +91,19 @@ $count = 1;
 </thead>
 <tbody>
     <?php foreach ($results as $result): ?>
+        <tr>
+            <td></td>
+            <td>Time</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
         <tr>
             <td><?php echo $count++; ?></td>
             <td><?php echo $this->Time->format('h:i A', $result['appointments']['appointment_time']); ?></td>

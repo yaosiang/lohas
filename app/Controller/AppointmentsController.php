@@ -3,7 +3,7 @@
 class AppointmentsController extends AppController {
 
     public $helpers = array('Time');
-    public $uses = array('Appointment', 'AppointmentContact', 'Notification', 'Registration', 'TimeSlot');
+    public $uses = array('Appointment', 'AppointmentContact', 'FollowUp', 'Notification', 'Registration', 'TimeSlot');
     public $components = array('Session');
 
     public function showDailyAppointment($y = null, $m = null, $d = null) {
@@ -152,7 +152,7 @@ class AppointmentsController extends AppController {
 
                         // 更新預約記錄連結的門診資料
                         $this->Registration->id = $this->Appointment->getNextRegistrationId($id);
-                        $this->Registration->saveField('registration_time', $this->request->data['Appointment']['appointment_time']);
+                        $this->Registration->saveField('registration_time', $appointment_time);
                         $this->Registration->saveField('patient_name', $this->request->data['Appointment']['contact_name']);
                         $this->Registration->saveField('time_slot_id', $this->TimeSlot->getTimeSlot($appointment_time));
                         CakeLog::write('debug', 'AppointmentsController.edit() - 更新預約記錄(' . $id . ')連結的門診資料(' . $this->Registration->id . ')');

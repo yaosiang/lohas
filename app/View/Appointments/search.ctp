@@ -34,6 +34,7 @@ if (!is_null($results)) {
     <table class="table table-striped">
         <thead>
         <th>序號</th>
+        <th>星期</th>
         <th>時間</th>
         <th>聯絡姓名</th>
         <th>聯絡電話</th>

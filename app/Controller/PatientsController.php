@@ -45,8 +45,7 @@ class PatientsController extends AppController {
             if ($this->Patient->save($this->request->data)) {
 
                 // 有指定 Registration id 時，需要更改門診資料
-                if (!is_null($this->request->data['Registration']['id'])) {
-
+                if (!empty($this->request->data['Registration']['id'])) {
                     $this->loadModel('Registration');
                     $this->Registration->id = $this->request->data['Registration']['id'];
                     $this->Registration->saveField('patient_id', $this->Patient->id);
@@ -109,18 +108,29 @@ class PatientsController extends AppController {
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
         }
-
+        
         $this->Patient->id = $id;
         $patient_name = $this->Patient->field('name');
 
-        if ($this->Patient->delete($id)) {
+        $this->loadModel('Registration');
+        $results = $this->Registration->findAllByPatientId($this->Patient->id);
 
-            $this->Session->setFlash('病患 ' . $patient_name . ' 資料已刪除！', 'alert', array(
+        if (empty($results)) {
+            if ($this->Patient->delete($id)) {
+
+                $this->Session->setFlash('病患 ' . $patient_name . ' 資料已刪除！', 'alert', array(
+                    'plugin' => 'TwitterBootstrap',
+                    'class' => 'alert-success'
+                ));
+            }
+        } else {
+            $this->Session->setFlash('病患 ' . $patient_name . ' 資料與其它記錄已連結，不能刪除！', 'alert', array(
                 'plugin' => 'TwitterBootstrap',
-                'class' => 'alert-success'
+                'class' => 'alert-error'
             ));
-            $this->redirect(array('action' => 'index'));
         }
+
+        $this->redirect(array('action' => 'index'));
     }
 
     public function search() {
@@ -207,7 +217,7 @@ class PatientsController extends AppController {
         }
     }
 
-    public function importPatient() {
+    private function importPatient() {
 
         $this->layout = 'ajax';
 
@@ -224,7 +234,7 @@ class PatientsController extends AppController {
         }
     }
 
-    public function importData() {
+    private function importData() {
 
         $this->layout = 'ajax';
 
