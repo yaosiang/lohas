@@ -33,7 +33,6 @@
         echo $this->Html->css('bootstrap.min');
         echo $this->Html->css('bootstrap-datepicker');
         echo $this->Html->css('bootstrap-timepicker');
-        echo $this->Html->css('bootstrap.min');
 
         echo $this->fetch('meta');
         echo $this->fetch('css');
@@ -105,12 +104,12 @@
                     <p> 透過預約記錄，你可以幫助病患事先預約門診時間。建立預約記錄將一併建立該時段門診資料。因此，不用花時間複製貼上。</p>
                     <p><?php echo $this->Html->link('前往 >>', '/appointments/showDailyAppointment', array('class' => 'btn')); ?></p>           
                 </div>
-                <div class="span4">
+<!--                 <div class="span4">
                     <h2>預約關懷</h2>
                     <p> 若病患在約定的預約時間沒有來，預約關懷能協助你記錄下聯絡結果，看是要改約時間，或者就原諒他吧。</p>
                     <p><?php echo $this->Html->link('前往 >>', '/appointment_contacts/showMonthlyAppointmentContact', array('class' => 'btn')); ?></p>          
                 </div>
-                <div class="span4">
+ -->                <div class="span4">
                     <h2>回診追蹤</h2>
                     <p> 找出那些病患尚未回診，一向是耗費時間的事情。回診追蹤幫助你列出清單，並在病患回診時，自動記錄下回診時間。</p>
                     <p><?php echo $this->Html->link('前往 >>', '/follow_up/showMonthlyFollowUp', array('class' => 'btn')); ?></p>          
