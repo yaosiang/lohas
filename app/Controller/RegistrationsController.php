@@ -2,7 +2,7 @@
 
 class RegistrationsController extends AppController {
 
-    public $helpers = array('Time');
+    public $helpers = array('Time', 'Xls');
     public $uses = array('Appointment', 'Bill', 'FollowUp', 'Further', 'Notification',
         'Patient', 'Registration', 'TimeSlot');
     public $components = array('Session');
@@ -339,6 +339,17 @@ class RegistrationsController extends AppController {
         }
 
         $this->redirect(array('action' => 'showDailyRegistration', $date->format('Y'), $date->format('m'), $date->format('d')));
+    }
+
+    public function downloadDailyRegistration($y = null, $m = null, $d = null) {
+
+        $date = date("Y-m-d", mktime(0, 0, 0, (is_null($m) ? $m = date("m") : $m), (is_null($d) ? $d = date("d") : $d), (is_null($y) ? $y = date("Y") : $y)
+                ));
+        $results = $this->Registration->query("CALL getDailyRegistration('" . $date . "')");
+        $this->set('results', $results);
+        $this->set('year', $y);
+        $this->set('month', $m);
+        $this->set('day', $d);
     }
 
     public function search() {

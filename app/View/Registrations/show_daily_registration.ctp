@@ -66,6 +66,7 @@ $count = 1;
 
 <div class="btn-group">
     <?php echo $this->Html->link('新增門診資料', '/registrations/add', array('class' => 'btn pull-left', 'icon' => 'plus')); ?>
+    <?php echo $this->Html->link('匯出當日門診', '/registrations/downloadDailyRegistration/' . $year . '/' . $month . '/' . $day, array('class' => 'btn pull-left', 'icon' => 'download')); ?>
 </div>        
 
 <hr />
