@@ -36,26 +36,31 @@ class CallListsController extends AppController {
         $results = $this->Appointment->query("CALL getCallList('" . $date . "', " . $subDay . " )");
 
         //create a file
-        $filename = '簡訊關懷_'. $y . '-' . $m . '-' . $d . '.csv';
+        $filename = 'SMS_'. $y . '-' . $m . '-' . $d . '.csv';
         $csv_file = fopen('php://output', 'w');
-
-        setlocale(LC_TIME, "zh_TW");
         
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
         header('Content-type: application/csv');
         header("Content-Type: application/force-download");
         header("Content-Type: application/download");
-        header('Content-Disposition: inline; filename="' . $filename . '"');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
 
         // Each iteration of this while loop will be a row in your .csv file where each field corresponds to the heading of the column
         foreach($results as $result) {
             // Array indexes correspond to the field names in your db table(s)
             if (!empty($result['appointments']['contact_phone'])) {
+
+                if (strcmp(date('a', strtotime($result['appointments']['appointment_time'])), 'am')) {
+                    $meridiem = '早上';
+                } else {
+                    $meridiem = '下午';
+                }
+
                 $row = array(
                     $result['appointments']['contact_phone'],
                     $result['appointments']['contact_name'],
-                    strftime('%p', strtotime($result['appointments']['appointment_time'])),
-                    date('h:i', strtotime($result['appointments']['appointment_time']))
+                    $meridiem,
+                    $this->niceTimeString(date('g:i', strtotime($result['appointments']['appointment_time'])))
                     );
 
                 fputcsv($csv_file, $row, ',', '"');
@@ -73,6 +78,21 @@ class CallListsController extends AppController {
         } else {
             return 1;
         }
+    }
+
+    private function niceTimeString($t = null) {
+
+        if (strcmp(substr($t, -2), '00') == 0) {
+            $t = substr($t, 0, -2);
+        } elseif (strcmp(substr($t, -2), '30') == 0) {
+            $t = substr($t, 0, -2) . '半';
+        } else {
+            $t = $t . '分';
+        }
+
+        $t = str_replace(':', '點', $t);
+
+        return $t;
     }
 
 }

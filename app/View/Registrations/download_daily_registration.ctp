@@ -5,7 +5,7 @@
  * with the help of the xlsHelper
  */
 //input the export file name
-$this->Xls->setHeader('當日門診清單_' . $year . '-' . $month . '-' . $day);
+$this->Xls->setHeader('Registration_' . $year . '-' . $month . '-' . $day);
 
 $this->Xls->addXmlHeader();
 $this->Xls->setWorkSheetName('DailyRegistration');
