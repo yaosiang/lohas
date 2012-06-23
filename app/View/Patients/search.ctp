@@ -37,6 +37,7 @@
         <th>聯絡電話</th>
         <th>初診日期</th>
         <th>初診來源</th>
+        <th>特約商店</th>
         <th>備註</th>
         <th>編輯病患</th>
     </thead>
@@ -49,6 +50,7 @@
         <td><?php echo $patient['Patient']['phone']; ?></td>
         <td><?php echo $this->Time->format('Y-m-d', $patient['Patient']['initial_date']); ?></td>
         <td><?php echo $patient['Source']['description']; ?></td>
+        <td><?php echo $patient['AuthorizedCompany']['description']; ?></td>
         <td><?php echo $patient['Patient']['note']; ?></td>
         <td>
             <?php

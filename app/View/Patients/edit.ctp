@@ -35,6 +35,12 @@
         'empty' => '（請選擇）'
     ));
 
+    echo $this->Form->input('authorized_company_id', array(
+        'label' => '特約商店',
+        'options' => $authorized_companies,
+        'empty' => '（請選擇）'
+    ));
+
     echo $this->Form->input('note', array(
         'label' => '備註',
         'type' => 'textarea',

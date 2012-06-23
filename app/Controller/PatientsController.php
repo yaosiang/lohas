@@ -3,7 +3,7 @@
 class PatientsController extends AppController {
 
     public $helpers = array('Time');
-    public $uses = array('Patient', 'Source');
+    public $uses = array('AuthorizedCompany', 'Patient', 'Source');
     public $components = array('Session');
 
     public function index() {
@@ -25,6 +25,8 @@ class PatientsController extends AppController {
 
         // 填滿初診來源
         $this->set('sources', $this->Source->find('list', array('fields' => 'id, description')));
+        // 填滿特約商店
+        $this->set('authorized_companies', $this->AuthorizedCompany->find('list', array('fields' => 'id, description')));
 
         // 如果已經有輸入名字，塞到『病患姓名』欄位
         if (!is_null($patient_name)) {
@@ -77,6 +79,7 @@ class PatientsController extends AppController {
 
         $this->Patient->id = $id;
         $this->set('sources', $this->Source->find('list', array('fields' => 'id, description')));
+        $this->set('authorized_companies', $this->AuthorizedCompany->find('list', array('fields' => 'id, description')));
 
         if ($this->request->is('get')) {
 
@@ -86,7 +89,23 @@ class PatientsController extends AppController {
             // 如果掛號證字串不到 7 位數，填滿它
             $this->request->data('Patient.serial_number', str_pad(trim($this->request->data['Patient']['serial_number']), 7, '0', STR_PAD_LEFT));
 
+            // 如果未來的預約記錄有聯絡名字跟聯絡電話一樣，先找出來
+            $this->loadModel('Appointment');
+            $results = $this->Appointment->find('all', array(
+                'conditions' => array(
+                    'contact_name' => $this->Patient->field('name'),
+                    'contact_phone' => $this->Patient->field('phone'),
+                    'appointment_time >' => 'NOW()'),
+                'fields' => array('id')
+                    ));
+
             if ($this->Patient->save($this->request->data)) {
+
+                // 修改該病患未來的預約記錄的聯絡電話
+                foreach ($results as $result) {
+                    $this->Appointment->id = $result['Appointment']['id'];
+                    $this->Appointment->saveField('contact_phone', $this->Patient->field('phone'));
+                }
 
                 $this->Session->setFlash('病患 ' . $this->Patient->field('name') . ' 資料已更新！', 'alert', array(
                     'plugin' => 'TwitterBootstrap',
@@ -108,7 +127,7 @@ class PatientsController extends AppController {
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
         }
-        
+
         $this->Patient->id = $id;
         $patient_name = $this->Patient->field('name');
 

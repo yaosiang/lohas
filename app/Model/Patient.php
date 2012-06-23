@@ -29,6 +29,11 @@ class Patient extends AppModel {
             'message' => 'Numbers only',
             'allowEmpty' => true
         ),
+        'authorized_company_id' => array(
+            'rule' => 'numeric',
+            'message' => 'Numbers only',
+            'allowEmpty' => true
+        ),
         'note' => array(
             'rule' => array('maxLength', '1024'),
             'message' => '最大不能超過 1024 個字',
@@ -38,6 +43,9 @@ class Patient extends AppModel {
     public $belongsTo = array(
         'Source' => array(
             'className' => 'Source'
+        ),
+        'AuthorizedCompany' => array(
+            'className' => 'AuthorizedCompany'
         )
     );
     public $hasMany = array(

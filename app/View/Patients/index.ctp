@@ -30,9 +30,11 @@
     <thead>
     <th>掛號証</th>
     <th>病患姓名</th>
+    <th>暱稱</th>
     <th>聯絡電話</th>
     <th>初診日期</th>
     <th>初診來源</th>
+    <th>特約商店</th>
     <th>備註</th>
     <th>編輯病患</th>
     <th>刪除病患</th>
@@ -42,9 +44,11 @@
         <tr>
             <td><?php echo $patient['Patient']['serial_number']; ?></td>
             <td><?php echo $patient['Patient']['name']; ?></td>
+            <td><?php echo $patient['Patient']['nickname']; ?></td>
             <td><?php echo $patient['Patient']['phone']; ?></td>
             <td><?php echo $this->Time->format('Y-m-d', $patient['Patient']['initial_date']); ?></td>
             <td><?php echo $patient['Source']['description']; ?></td>
+            <td><?php echo $patient['AuthorizedCompany']['description']; ?></td>
             <td><?php echo $patient['Patient']['note']; ?></td>
             <td>
                 <?php

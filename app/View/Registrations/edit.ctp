@@ -131,6 +131,7 @@
     echo $this->Form->hidden('Registration.patient_id');
     echo $this->Form->hidden('Registration.patient_name');
     echo $this->Form->hidden('Patient.phone');
+    echo $this->Form->hidden('Patient.authorized_company_id');
     ?>
 
     <div class="form-actions">

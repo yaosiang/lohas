@@ -3,7 +3,7 @@
 class RegistrationsController extends AppController {
 
     public $helpers = array('Time', 'Xls');
-    public $uses = array('Appointment', 'Bill', 'FollowUp', 'Further', 'Notification',
+    public $uses = array('Appointment', 'AuthorizedCompany', 'Bill', 'FollowUp', 'Further', 'Notification',
         'Patient', 'Registration', 'TimeSlot');
     public $components = array('Session');
 
@@ -154,6 +154,14 @@ class RegistrationsController extends AppController {
                     $billId = $this->Bill->getBillId($id);
                     if ($billId) {
                         $this->Registration->Bill->id = $billId;
+
+                        // 病患有特約商店資格，要設定掛號費為 0，並且備註也要註明
+                        if ($this->isExistAuthorizedCompany()) {
+                            $this->request->data('Bill.registration_fee', 0);
+
+                            $str = $this->addAuthorizedCompanyToNote($this->request->data['Registration']['note']);
+                            $this->Registration->saveField('note', $str);
+                        }
                     }
                     $this->Registration->Bill->set('registration_id', $id);
                     $this->Registration->Bill->save($this->request->data);
@@ -466,6 +474,34 @@ class RegistrationsController extends AppController {
         }
 
         return $isEmpty;
+    }
+
+    private function isExistAuthorizedCompany() {
+
+        $isExist = true;
+
+        $result = $this->Patient->findById($this->request->data['Registration']['patient_id'], array('authorized_company_id'));
+        if (empty($result['Patient']['authorized_company_id'])) {
+            $isExist = false;            
+        }
+
+        return $isExist;
+    }
+
+    private function addAuthorizedCompanyToNote($str = null) {
+
+        $rId = $this->Patient->findById($this->request->data['Registration']['patient_id'], array('authorized_company_id'));
+        $result = $this->AuthorizedCompany->findById($rId['Patient']['authorized_company_id'], array('description'));
+        
+        if (empty($str)) {
+            $str = '特約/' . $result['AuthorizedCompany']['description'];
+        } else {
+            if (!strstr($str, '特約')) {
+                $str = $str . ', 特約/' . $result['AuthorizedCompany']['description'];
+            }
+        }
+
+        return $str;
     }
 
     private function cleanUpForNextAppointment($id = null) {
