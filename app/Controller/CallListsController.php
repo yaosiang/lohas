@@ -29,16 +29,16 @@ class CallListsController extends AppController {
     public function downloadCallList($y = null, $m = null, $d = null) {
 
         $this->autoRender = false;
-        
+
         $date = date("Y-m-d", mktime(0, 0, 0, (is_null($m) ? $m = date("m") : $m), (is_null($d) ? $d = date("d") : $d), (is_null($y) ? $y = date("Y") : $y)
                 ));
         $subDay = $this->getSubDay($y, $m, $d);
         $results = $this->Appointment->query("CALL getCallList('" . $date . "', " . $subDay . " )");
 
         //create a file
-        $filename = 'SMS_'. $y . '-' . $m . '-' . $d . '.csv';
+        $filename = 'SMS_' . $y . '-' . $m . '-' . $d . '.csv';
         $csv_file = fopen('php://output', 'w');
-        
+
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
         header('Content-type: application/csv');
         header("Content-Type: application/force-download");
@@ -46,7 +46,7 @@ class CallListsController extends AppController {
         header('Content-Disposition: attachment; filename="' . $filename . '"');
 
         // Each iteration of this while loop will be a row in your .csv file where each field corresponds to the heading of the column
-        foreach($results as $result) {
+        foreach ($results as $result) {
             // Array indexes correspond to the field names in your db table(s)
             if (!empty($result['appointments']['contact_phone'])) {
 
@@ -61,7 +61,7 @@ class CallListsController extends AppController {
                     $result['appointments']['contact_name'],
                     $meridiem,
                     $this->niceTimeString(date('g:i', strtotime($result['appointments']['appointment_time'])))
-                    );
+                );
 
                 fputcsv($csv_file, $row, ',', '"');
             }

@@ -143,21 +143,17 @@ class RegistrationsController extends AppController {
                 }
 
                 // 更新門診收入
-                if (!$this->isBillEmpty()) {
+                if ($this->isBillEmpty()) {
                     $billId = $this->Bill->getBillId($id);
                     if ($billId) {
                         $this->Registration->Bill->id = $billId;
-                    } else {
-                        // 有確定門診收入，才算病患確實回診
-                        // 若病患確實回診，且追蹤名單有該病患，就要修改追蹤名單的回診時間
-                        $result = $this->FollowUp->find('all', array(
-                            'conditions' => array('FollowUp.patient_id' => $this->request->data['Registration']['patient_id'], 'FollowUp.come_back_time IS NULL'),
-                            'fields' => 'id',
-                                ));
-                        if (!empty($result)) {
-                            $this->FollowUp->setComBackTime($result[0]['FollowUp']['id'], $date->format('Y-m-d'));
-                            CakeLog::write('debug', 'RegistrationsController.edit() - 更新門診資料(' . $id . ')連結的追蹤名單(' . $result[0]['FollowUp']['id'] . ')的回診時間');
-                        }
+                        $this->Registration->Bill->delete($billId);
+                        CakeLog::write('debug', 'RegistrationsController.edit() - 刪除門診資料(' . $id . ')的門診收入');
+                    }
+                } else {
+                    $billId = $this->Bill->getBillId($id);
+                    if ($billId) {
+                        $this->Registration->Bill->id = $billId;
                     }
                     $this->Registration->Bill->set('registration_id', $id);
                     $this->Registration->Bill->save($this->request->data);
@@ -244,6 +240,20 @@ class RegistrationsController extends AppController {
 
                         $this->cleanUpForNextAppointment($id);
                         $this->cleanUpForFollowUp($id);
+                    }
+
+                    if (strcmp($this->request->data['Further']['Further'], "1") == 0 ||
+                            strcmp($this->request->data['Further']['Further'], "2") == 0 ||
+                            strcmp($this->request->data['Further']['Further'], "3") == 0) {
+                        // 若病患確實回診，且追蹤名單有該病患，就要修改追蹤名單的回診時間
+                        $result = $this->FollowUp->find('all', array(
+                            'conditions' => array('FollowUp.patient_id' => $this->request->data['Registration']['patient_id'], 'FollowUp.come_back_time IS NULL'),
+                            'fields' => 'id',
+                                ));
+                        if (!empty($result)) {
+                            $this->FollowUp->setComBackTime($result[0]['FollowUp']['id'], $date->format('Y-m-d'));
+                            CakeLog::write('debug', 'RegistrationsController.edit() - 更新門診資料(' . $id . ')連結的追蹤名單(' . $result[0]['FollowUp']['id'] . ')的回診時間');
+                        }
                     }
                 } else {
 
