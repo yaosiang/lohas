@@ -36,8 +36,8 @@ foreach ($results as $result):
     $this->Xls->writeString($result['patients']['serial_number']);
     $this->Xls->writeString($result['concated_identities']['identities']);
     $this->Xls->writeNumber($result['bills']['registration_fee']);
-    $this->Xls->writeNumber($result['bills']['drug_expense']);
     $this->Xls->writeNumber($result['bills']['copayment']);
+    $this->Xls->writeNumber($result['bills']['drug_expense']);
     $this->Xls->writeNumber($result['bills']['own_expense']);
     $this->Xls->writeString($result['registrations']['note']);
     $this->Xls->writeString($result['furthers']['description']);
