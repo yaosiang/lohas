@@ -106,6 +106,16 @@
                                 echo $this->Html->link('病患資料', '/patients', array('icon' => 'user'));
                             ?>
                             </li>
+                            </li>
+                            <?php
+                                if (preg_match("/\/lohas\/authorized_companies/", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
+                                echo $this->Html->link('特約廠商', '/authorized_companies', array('icon' => 'briefcase'));
+                            ?>
+                            </li>                            
                             <li class="divider"></li>
                             <li class="nav-header">提醒事項作業</li>				
 <!--                             <li>

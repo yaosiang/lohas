@@ -59,12 +59,12 @@ class CallListsController extends AppController {
                     }
 
                     if (intval(date('g', strtotime($result['appointments']['appointment_time']))) == 6) {
-                        if (intval(date('i', strtotime($result['appointments']['appointment_time']))) >= 30) {
+                        if (intval(date('i', strtotime($result['appointments']['appointment_time']))) == 00) {
                             $meridiem = '晚上';
                         }
                     }
                 } else {
-                    $meridiem = '早上';
+                    $meridiem = '上午';
                 }
 
                 $row = array(
