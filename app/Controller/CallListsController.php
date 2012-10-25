@@ -51,20 +51,9 @@ class CallListsController extends AppController {
             if (!empty($result['appointments']['contact_phone'])) {
 
                 if (strcmp(date('a', strtotime($result['appointments']['appointment_time'])), 'am')) {
-                    $meridiem = '下午';
-
-                    // PM 6:30 以後，改用晚上
-                    if (intval(date('g', strtotime($result['appointments']['appointment_time']))) > 6) {
-                        $meridiem = '晚上';
-                    }
-
-                    if (intval(date('g', strtotime($result['appointments']['appointment_time']))) == 6) {
-                        if (intval(date('i', strtotime($result['appointments']['appointment_time']))) >= 30) {
-                            $meridiem = '晚上';
-                        }
-                    }
-                } else {
                     $meridiem = '早上';
+                } else {
+                    $meridiem = '下午';
                 }
 
                 $row = array(
