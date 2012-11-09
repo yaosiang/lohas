@@ -5947,6 +5947,7 @@ class ModelWriteTest extends BaseModelTest {
  * @return void
  */
 	public function testValidateAssociated() {
+		$this->loadFixtures('Attachment', 'Article', 'Comment');
 		$TestModel = new Comment();
 		$TestModel->Attachment->validate = array('attachment' => 'notEmpty');
 
@@ -6312,8 +6313,8 @@ class ModelWriteTest extends BaseModelTest {
  * @return void
  */
 	public function testWriteFloatAsGerman() {
-		$restore = setlocale(LC_ALL, 0);
-		setlocale(LC_ALL, 'de_DE');
+		$restore = setlocale(LC_NUMERIC, 0);
+		setlocale(LC_NUMERIC, 'de_DE');
 
 		$model = new DataTest();
 		$result = $model->save(array(
@@ -6321,7 +6322,7 @@ class ModelWriteTest extends BaseModelTest {
 			'float' => 3.14593
 		));
 		$this->assertTrue((bool)$result);
-		setlocale(LC_ALL, $restore);
+		setlocale(LC_NUMERIC, $restore);
 	}
 
 /**

@@ -103,8 +103,11 @@ class ValidationTest extends CakeTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->_appEncoding = Configure::read('App.encoding');
-		$this->_appLocale = setlocale(LC_ALL, "0");
-		setlocale(LC_ALL, 'en_US');
+		$this->_appLocale = array();
+		foreach (array(LC_MONETARY, LC_NUMERIC, LC_TIME) as $category) {
+			$this->_appLocale[$category] = setlocale($category, 0);
+			setlocale($category, 'en_US');
+		}
 	}
 
 /**
@@ -115,7 +118,9 @@ class ValidationTest extends CakeTestCase {
 	public function tearDown() {
 		parent::tearDown();
 		Configure::write('App.encoding', $this->_appEncoding);
-		setlocale(LC_ALL, $this->_appLocale);
+		foreach ($this->_appLocale as $category => $locale) {
+			setlocale($category, $locale);
+		}
 	}
 
 /**
@@ -1657,12 +1662,13 @@ class ValidationTest extends CakeTestCase {
  * @return void
  */
 	public function testIpV4() {
-		$this->assertTrue(Validation::ip('0.0.0.0'));
+		$this->assertTrue(Validation::ip('0.0.0.0', 'ipv4'));
 		$this->assertTrue(Validation::ip('192.168.1.156'));
 		$this->assertTrue(Validation::ip('255.255.255.255'));
 		$this->assertFalse(Validation::ip('127.0.0'));
 		$this->assertFalse(Validation::ip('127.0.0.a'));
 		$this->assertFalse(Validation::ip('127.0.0.256'));
+		$this->assertFalse(Validation::ip('2001:0db8:85a3:0000:0000:8a2e:0370:7334', 'ipv4'), 'IPv6 is not valid IPv4');
 	}
 
 /**
@@ -1702,6 +1708,7 @@ class ValidationTest extends CakeTestCase {
 		$this->assertFalse(Validation::ip('1:2:3::4:5:6:7:8:9', 'IPv6'));
 		$this->assertFalse(Validation::ip('::ffff:2.3.4', 'IPv6'));
 		$this->assertFalse(Validation::ip('::ffff:257.1.2.3', 'IPv6'));
+		$this->assertFalse(Validation::ip('255.255.255.255', 'ipv6'), 'IPv4 is not valid IPv6');
 	}
 
 /**

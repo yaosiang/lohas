@@ -278,6 +278,36 @@ class ExceptionRendererTest extends CakeTestCase {
 	}
 
 /**
+ * test that helpers in custom CakeErrorController are not lost
+ */
+	public function testCakeErrorHelpersNotLost() {
+		$testApp = CAKE . 'Test' . DS . 'test_app' . DS;
+		App::build(array(
+			'Controller' => array(
+				$testApp . 'Controller' . DS
+			),
+			'View/Helper' => array(
+				$testApp . 'View' . DS . 'Helper' . DS
+			),
+			'View/Layouts' => array(
+				$testApp . 'View' . DS . 'Layouts' . DS
+			),
+			'Error' => array(
+				$testApp . 'Error' . DS
+			),
+		), App::RESET);
+
+		App::uses('TestAppsExceptionRenderer', 'Error');
+		$exception = new SocketException('socket exception');
+		$renderer = new TestAppsExceptionRenderer($exception);
+
+		ob_start();
+		$renderer->render();
+		$result = ob_get_clean();
+		$this->assertContains('<b>peeled</b>', $result);
+	}
+
+/**
  * test that unknown exception types with valid status codes are treated correctly.
  *
  * @return void
@@ -526,6 +556,15 @@ class ExceptionRendererTest extends CakeTestCase {
 				array(
 					'/<h2>Missing Database Connection<\/h2>/',
 					'/Article requires a database connection/'
+				),
+				500
+			),
+			array(
+				new MissingConnectionException(array('class' => 'Mysql', 'enabled' => false)),
+				array(
+					'/<h2>Missing Database Connection<\/h2>/',
+					'/Mysql requires a database connection/',
+					'/Mysql driver is NOT enabled/'
 				),
 				500
 			),

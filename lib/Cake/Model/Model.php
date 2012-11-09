@@ -1166,7 +1166,7 @@ class Model extends Object implements CakeEventListener {
  */
 	protected function _setAliasData($data) {
 		$models = array_keys($this->getAssociated());
-		$schema = array_keys($this->schema());
+		$schema = array_keys((array)$this->schema());
 		foreach ($data as $field => $value) {
 			if (in_array($field, $schema) || !in_array($field, $models)) {
 				$data[$this->alias][$field] = $value;
@@ -2357,7 +2357,9 @@ class Model extends Object implements CakeEventListener {
 					if ($options['deep']) {
 						$validates = $this->{$association}->validateAssociated($values, $options);
 					} else {
-						$validates = $this->{$association}->create($values) !== null && $this->{$association}->validates($options);
+						$this->{$association}->create(null);
+						$validates = $this->{$association}->set($values) && $this->{$association}->validates($options);
+						$data[$association] = $this->{$association}->data[$this->{$association}->alias];
 					}
 					if (is_array($validates)) {
 						if (in_array(false, $validates, true)) {
@@ -2438,13 +2440,14 @@ class Model extends Object implements CakeEventListener {
 						break;
 					}
 				}
-
-				$keys = $this->find('first', array(
-					'fields' => $this->_collectForeignKeys(),
-					'conditions' => array($this->alias . '.' . $this->primaryKey => $id),
-					'recursive' => -1,
-					'callbacks' => false
-				));
+				if ($updateCounterCache) {
+					$keys = $this->find('first', array(
+						'fields' => $this->_collectForeignKeys(),
+						'conditions' => array($this->alias . '.' . $this->primaryKey => $id),
+						'recursive' => -1,
+						'callbacks' => false
+					));
+				}
 			}
 
 			if ($db->delete($this, array($this->alias . '.' . $this->primaryKey => $id))) {
@@ -3426,10 +3429,6 @@ class Model extends Object implements CakeEventListener {
 		}
 
 		$this->schemaName = $db->getSchemaName();
-
-		if (empty($db) || !is_object($db)) {
-			throw new MissingConnectionException(array('class' => $this->name));
-		}
 	}
 
 /**
