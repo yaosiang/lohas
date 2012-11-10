@@ -36,7 +36,7 @@
     ));
 
     echo $this->Form->input('authorized_company_id', array(
-        'label' => '特約商店',
+        'label' => '特約廠商',
         'options' => $authorized_companies,
         'empty' => '（請選擇）'
     ));

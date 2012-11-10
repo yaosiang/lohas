@@ -52,13 +52,13 @@ $count = 1;
     </div>
     <div class="span4">
         <?php
-        echo $this->Form->create('Registration', array('class' => 'well form-search pull-right', 'action' => 'search'));
+        echo $this->Form->create('Registration', array('class' => 'form-search pull-right', 'action' => 'searchByBirthday'));
         echo $this->Form->input('parm', array(
             'type' => 'text',
-            'placeholder' => '請輸入掛號証',
-            'append' => array('找門診', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
+            'placeholder' => '例如：0750214',
+            'append' => array('找掛號證', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
         ));
-        echo $this->Html->para(null, '請輸入掛號証');
+        echo $this->Html->para(null, '請輸入病患生日');
         echo $this->Form->end();
         ?>
     </div>    

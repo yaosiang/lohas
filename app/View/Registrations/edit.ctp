@@ -43,6 +43,14 @@
         'multiple' => 'checkbox inline',
         'label' => '就診身分'
     ));
+    
+    echo $this->Form->input(uniqid(), array(
+        'id' => 'ForFree',
+        'value' => '不收錢',
+        'label' => '',
+        'type' => 'text',
+        'class' => 'span4 btn',
+    ));
 
     echo $this->Form->input('Bill.registration_fee', array(
         'label' => '掛號費',
@@ -198,6 +206,17 @@ $code = '
             }            
         }
     );
+
+    // 一次把金額設定成 0
+    $("#ForFree").click(
+        function() {
+            $("#BillRegistrationFee").attr("value", "0");
+            $("#BillCopayment").attr("value", "0");
+            $("#BillDrugExpense").attr("value", "0");
+            $("#BillOwnExpense").attr("value", "0");
+        }
+    );
+
 ';
 echo $this->Html->scriptBlock($code, array('inline' => false));
 ?>

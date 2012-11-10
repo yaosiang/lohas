@@ -19,7 +19,13 @@ class RegistrationsController extends AppController {
         $this->set('title_for_layout', '心樂活診所 - 門診資料');
     }
 
-    public function add() {
+    public function add($serial_number = null) {
+
+        if (!is_null($serial_number)) {
+            $this->set('serial_number', $serial_number);
+        } else {
+            $this->set('serial_number', null);
+        }
 
         $this->set('title_for_layout', '心樂活診所 - 門診資料');
 
@@ -370,14 +376,14 @@ class RegistrationsController extends AppController {
         $this->set('day', $d);
     }
 
-    public function search() {
+    public function searchByBirthday() {
 
-        $this->set('title_for_layout', '心樂活診所 - 門診資料');
+        $this->set('title_for_layout', '心樂活診所 - 病患資料');
 
         if (!is_null($this->request->data['Registration']['parm'])) {
 
-            $sn = $this->request->data['Registration']['parm'];
-            $results = $this->Registration->query("CALL getDailyRegistrationBySerialNumber('" . $sn . "')");
+            $birthday = $this->request->data['Registration']['parm'];
+            $results = $this->Patient->findAllByBirthday($birthday);
 
             if (empty($results)) {
                 $this->set('results', null);

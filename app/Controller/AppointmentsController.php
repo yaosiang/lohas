@@ -18,7 +18,13 @@ class AppointmentsController extends AppController {
         $this->set('title_for_layout', '心樂活診所 - 預約記錄');
     }
 
-    public function add() {
+    public function add($serial_number = null) {
+
+        if (!is_null($serial_number)) {
+            $this->set('serial_number', $serial_number);
+        } else {
+            $this->set('serial_number', null);
+        }
 
         $this->set('title_for_layout', '心樂活診所 - 預約記錄');
 
@@ -286,15 +292,17 @@ class AppointmentsController extends AppController {
 
         $this->redirect(array('action' => 'showDailyAppointment', $date->format('Y'), $date->format('m'), $date->format('d')));
     }
+    
+    public function searchByBirthday() {
 
-    public function search() {
-
-        $this->set('title_for_layout', '心樂活診所 - 預約資料');
+        $this->set('title_for_layout', '心樂活診所 - 病患資料');
 
         if (!is_null($this->request->data['Appointment']['parm'])) {
 
-            $name = $this->request->data['Appointment']['parm'];
-            $results = $this->Appointment->query("CALL getDailyAppointmentByContactName('" . $name . "')");
+            $birthday = $this->request->data['Appointment']['parm'];
+
+            $this->loadModel('Patient');            
+            $results = $this->Patient->findAllByBirthday($birthday);
 
             if (empty($results)) {
                 $this->set('results', null);
@@ -305,7 +313,7 @@ class AppointmentsController extends AppController {
             $this->set('results', null);
         }
     }
-
+    
     private function isLinkedToOther($id = null) {
 
         $isLinked = false;

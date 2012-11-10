@@ -30,7 +30,7 @@
 
         <?php
         echo $this->Html->meta('icon');
-        echo $this->Html->css('bootstrap.min');
+        echo $this->Html->css('bootstrap');
         echo $this->Html->css('bootstrap-datepicker');
         echo $this->Html->css('bootstrap-timepicker');
 
@@ -108,6 +108,16 @@
                             </li>
                             </li>
                             <?php
+                                if (preg_match("/\/lohas\/sources/", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
+                                echo $this->Html->link('初診來源', '/sources', array('icon' => 'hand-up'));
+                            ?>
+                            </li>                            
+                            </li>
+                            <?php
                                 if (preg_match("/\/lohas\/authorized_companies/", $this->request->here)) {
                                     echo '<li class="active">';
                                 } else {
@@ -152,7 +162,7 @@
                                 } else {
                                     echo '<li>';
                                 }
-                                echo $this->Html->link('門診收入', '/bill_stats', array('icon' => 'briefcase'));
+                                echo $this->Html->link('門診收入', '/bill_stats', array('icon' => 'gift'));
                             ?>
                             </li>
                             <?php

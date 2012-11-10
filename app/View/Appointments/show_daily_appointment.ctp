@@ -52,16 +52,16 @@ $count = 1;
     </div>
     <div class="span4">
         <?php
-        // echo $this->Form->create('Appointment', array('class' => 'well form-search pull-right', 'action' => 'search'));
-        // echo $this->Form->input('parm', array(
-        //     'type' => 'text',
-        //     'placeholder' => '請輸入聯絡姓名',
-        //     'append' => array('找預約', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
-        // ));
-        // echo $this->Html->para(null, '預約記錄的搜尋功能還不能用！');
-        // echo $this->Form->end();
+        echo $this->Form->create('Appointment', array('class' => 'form-search pull-right', 'action' => 'searchByBirthday'));
+        echo $this->Form->input('parm', array(
+            'type' => 'text',
+            'placeholder' => '例如：0750214',
+            'append' => array('找掛號證', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
+        ));
+        echo $this->Html->para(null, '請輸入病患生日');
+        echo $this->Form->end();
         ?>
-    </div>        
+    </div>            
 </div>
 
 <div class="row-fluid">

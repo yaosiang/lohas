@@ -95,7 +95,7 @@ class PatientsController extends AppController {
                 'conditions' => array(
                     'contact_name' => $this->Patient->field('name'),
                     'contact_phone' => $this->Patient->field('phone'),
-                    'appointment_time >' => 'NOW()'),
+                    'appointment_time >' => date('Y-m-d H:i:s')),
                 'fields' => array('id')
                     ));
 

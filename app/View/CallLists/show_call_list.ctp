@@ -44,12 +44,84 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span10">
+    <div class="span12">
         <div class="btn-group">
             <?php echo $this->Html->link('匯出簡訊專用CSV檔', '/call_lists/downloadCallList/' . $year . '/' . $month . '/' . $day, array('class' => 'btn pull-left', 'target' => '_blank', 'icon' => 'download')); ?>
+            <a href="#myModal" role="button" class="btn" data-toggle="modal">寄送簡訊</a>
         </div>
     </div>
+        
+    <!-- Modal -->
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <?php echo $this->Form->create(null, array('url' => array('controller' => 'CallLists', 'action' => 'sendMessages'), 'class' => 'form-inline')); ?>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">編輯將寄出簡訊</h3>
+        </div>
+        <div class="modal-body">
+            <fieldset>
+            <table class="table table-striped">
+                <thead>
+                <th>聯絡電話</th>
+                <th>聯絡姓名</th>
+                <th>預約時段</th>
+                <th>預約時間</th>
+                <th>額外提醒</th>
+                </thead>
+                <tbody>
+                <?php foreach ($to_be_sending_messages as $message): ?>
+                    <tr>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'span10',
+                            'value' => $message[0]
+                        )); ?>
+                    </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'span8',
+                            'value' => $message[1]
+                        )); ?>
+                    </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'span4',
+                            'value' => $message[2]
+                        )); ?>
+                    </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'span6',
+                            'value' => $message[3]
+                        )); ?>
+                    </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'input-medium',
+                            'value' => ''
+                        )); ?>
+                    </td>                            
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+            </table>
+            </fieldset>
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">關閉</button>
+            <button type="submit" class="btn btn-primary">寄出簡訊</button>
+        </div>
+        <?php echo $this->Form->end(); ?>
+    </div>
+
 </div>
+
 
 <hr />
 
