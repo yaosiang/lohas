@@ -4,17 +4,21 @@
     <legend>新增病患資料</legend>
 
     <?php
+    echo $this->Form->input('serial_number', array(
+        'label' => '掛號證'
+    ));
+    
     echo $this->Form->input('name', array(
         'label' => '病患姓名',
         'value' => $name
     ));
 
-    echo $this->Form->input('nickname', array(
-        'label' => '暱稱'
-    ));
+    // echo $this->Form->input('nickname', array(
+    //     'label' => '暱稱'
+    // ));
 
-    echo $this->Form->input('serial_number', array(
-        'label' => '掛號證'
+    echo $this->Form->input('birthday', array(
+        'label' => '生日'
     ));
 
     echo $this->Form->input('phone', array(

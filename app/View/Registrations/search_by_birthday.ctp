@@ -36,7 +36,7 @@ if (!is_null($results)) {
         <th>序號</th>
         <th>掛號證</th>
         <th>病患姓名</th>
-        <th>暱稱</th>
+        <th>生日</th>
         <th>聯絡電話</th>
         <th>初診日期</th>
         <th>特約廠商</th>
@@ -50,7 +50,7 @@ if (!is_null($results)) {
                 <td><?php echo $count++; ?></td>
                 <td><?php echo (int) $result['Patient']['serial_number']; ?></td>
                 <td><?php echo $result['Patient']['name']; ?></td>
-                <td><?php echo $result['Patient']['nickname']; ?></td>
+                <td><?php echo $result['Patient']['birthday']; ?></td>
                 <td><?php echo $result['Patient']['phone']; ?></td>
                 <td><?php echo $result['Patient']['initial_date']; ?></td>
                 <td><?php echo $result['AuthorizedCompany']['description']; ?></td>

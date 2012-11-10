@@ -7,12 +7,12 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span10">
+    <div class="span12">
     </div>
 </div>
 
 <div class="row-fluid">
-    <div class="span8">
+    <div class="span12">
         <?php echo $this->Form->create('AppointmentContact', array('url' => array('action' => 'showMonthlyAppointmentContact'), 'class' => 'well form-inline')); ?>
         <fieldset>
             <div class="control-group">

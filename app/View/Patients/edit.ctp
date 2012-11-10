@@ -4,16 +4,24 @@
     <legend>編輯病患資料</legend>
 
     <?php
+    echo $this->Form->input('serial_number', array(
+        'label' => '掛號證'
+    ));
+
     echo $this->Form->input('name', array(
         'label' => '病患姓名'
     ));
 
-    echo $this->Form->input('nickname', array(
-        'label' => '暱稱'
+    // echo $this->Form->input('nickname', array(
+    //     'label' => '暱稱'
+    // ));
+
+    echo $this->Form->input('birthday', array(
+        'label' => '生日'
     ));
-    
-    echo $this->Form->input('serial_number', array(
-        'label' => '掛號證'
+
+    echo $this->Form->input('phone', array(
+        'label' => '聯絡電話'
     ));
 
     echo $this->Form->input('initial_date', array(
@@ -23,10 +31,6 @@
         'maxYear' => date('Y'),
         'minYear' => 2011,
         'monthNames' => false
-    ));
-
-    echo $this->Form->input('phone', array(
-        'label' => '聯絡電話'
     ));
 
     echo $this->Form->input('source_id', array(

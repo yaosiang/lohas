@@ -18,6 +18,16 @@ class Patient extends AppModel {
                 'message' => '掛號證已經被其它病患使用'
             )
         ),
+        'birthday' => array(
+            'minLength' => array(
+                'rule' => array('minLength', '7'),
+                'message' => '生日最少需要 7 位'
+            ),
+            'maxLength' => array(
+                'rule' => array('maxLength', '7'),
+                'message' => '生日最多只能 7 位'
+            )
+        ),
         'initial_date' => array(
             'rule' => array('date', 'ymd'),
             'message' => 'Date only',

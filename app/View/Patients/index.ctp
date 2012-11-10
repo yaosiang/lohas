@@ -30,7 +30,7 @@
     <thead>
     <th>掛號証</th>
     <th>病患姓名</th>
-    <th>暱稱</th>
+    <th>生日</th>
     <th>聯絡電話</th>
     <th>初診日期</th>
     <th>初診來源</th>
@@ -44,7 +44,7 @@
         <tr>
             <td><?php echo $patient['Patient']['serial_number']; ?></td>
             <td><?php echo $patient['Patient']['name']; ?></td>
-            <td><?php echo $patient['Patient']['nickname']; ?></td>
+            <td><?php echo $patient['Patient']['birthday']; ?></td>
             <td><?php echo $patient['Patient']['phone']; ?></td>
             <td><?php echo $this->Time->format('Y-m-d', $patient['Patient']['initial_date']); ?></td>
             <td><?php echo $patient['Source']['description']; ?></td>
