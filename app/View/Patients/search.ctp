@@ -6,13 +6,13 @@
         <?php echo $this->Form->create('Patient', array('class' => 'well form-search pull-right', 'action' => 'search'));
             echo $this->Form->input('parm', array(
                 'type' => 'text',
-                'placeholder' => '姓名 或 掛號證',
+                'placeholder' => '姓名 or 掛號證 or 生日',
                 ));
             echo $this->Form->button('找病患', array(
                 'type' => 'submit',
                 'class' => 'btn'
                 ));
-            echo $this->Html->para(null, '請輸入姓名 or 掛號証');
+            echo $this->Html->para(null, '請輸入姓名 or 掛號証 or 生日');
             echo $this->Form->end(); 
         ?>
     </div>    

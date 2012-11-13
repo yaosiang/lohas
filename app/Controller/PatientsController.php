@@ -172,10 +172,20 @@ class PatientsController extends AppController {
                     'order' => array('Patient.serial_number DESC')
                         ));
 
-                if (!empty($patients)) {
-                    $this->set('patients', $patients);
+                if (empty($patients)) {
+
+                    $patients = $this->Patient->find('all', array(
+                        'conditions' => array('Patient.birthday' => $this->request->data['Patient']['parm']),
+                        'order' => array('Patient.serial_number DESC')
+                        ));
+
+                    if (empty($patients)) {
+                        $this->set('patients', null);
+                    } else {
+                        $this->set('patients', $patients);
+                    }
                 } else {
-                    $this->set('patients', null);
+                    $this->set('patients', $patients);
                 }
             } else {
                 $this->set('patients', $patients);

@@ -25,7 +25,7 @@ $count = 1;
 ?>
 
 <div class="row-fluid">
-    <div class="span8">
+    <div class="span6">
         <h1>
             <span id="regDate"><?php echo $year; ?>-<?php echo $month; ?>-<?php echo $day; ?></span>
             <?php
@@ -50,15 +50,15 @@ $count = 1;
             <?php echo $this->Html->link('', '#', array('class' => 'btn', 'icon' => 'calendar', 'id' => 'dp', 'data-date-format' => 'yyyy-mm-dd', 'data-date' => $year . '-' . $month . '-' . $day)); ?>
         </h1>
     </div>
-    <div class="span4">
+    <div class="span6">
         <?php
-        echo $this->Form->create('Registration', array('class' => 'form-search pull-right', 'action' => 'searchByBirthday'));
+        echo $this->Form->create('Registration', array('class' => 'well form-search pull-right', 'action' => 'search'));
         echo $this->Form->input('parm', array(
             'type' => 'text',
-            'placeholder' => '例如：0750214',
-            'append' => array('找掛號證', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
+            'placeholder' => '姓名 or 掛號証 or 生日',
+            'append' => array('找門診', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
         ));
-        echo $this->Html->para(null, '請輸入病患生日');
+        echo $this->Html->para(null, '請輸入姓名 or 掛號証 or 生日');
         echo $this->Form->end();
         ?>
     </div>    

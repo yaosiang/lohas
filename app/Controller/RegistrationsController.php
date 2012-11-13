@@ -376,24 +376,72 @@ class RegistrationsController extends AppController {
         $this->set('day', $d);
     }
 
-    public function searchByBirthday() {
+    public function search() {
 
-        $this->set('title_for_layout', '心樂活診所 - 病患資料');
+        $this->set('title_for_layout', '心樂活診所 - 門診資料');
 
         if (!is_null($this->request->data['Registration']['parm'])) {
 
-            $birthday = $this->request->data['Registration']['parm'];
-            $results = $this->Patient->findAllByBirthday($birthday);
+            $patients = $this->Patient->find('list', array(
+                'conditions' => array('Patient.name LIKE' => '%' . $this->request->data['Registration']['parm'] . '%'),
+                'fields' => array('serial_number'),
+                'order' => array('Patient.serial_number DESC')
+                    ));
 
-            if (empty($results)) {
-                $this->set('results', null);
-            } else {
+            if (empty($patients)) {
+
+                $serial_number = str_pad($this->request->data['Registration']['parm'], 7, '0', STR_PAD_LEFT);
+                $patients = $this->Patient->find('list', array(
+                    'conditions' => array('Patient.serial_number' => $serial_number),
+                    'fields' => array('serial_number'),
+                    'order' => array('Patient.serial_number DESC')
+                        ));
+
+                if (empty($patients)) {
+
+                    $patients = $this->Patient->find('list', array(
+                        'conditions' => array('Patient.birthday' => $this->request->data['Registration']['parm']),
+                        'fields' => array('serial_number'),
+                        'order' => array('Patient.serial_number DESC')
+                            ));
+
+                    if (empty($patients)) {
+                        $this->set('patients', null);
+                    }
+                }
+            }
+
+            $sn = array_values($patients);
+
+            $results = array();
+            for ($i = 0; $i < sizeof($sn); $i++) {
+                array_push($results, $this->Registration->query("CALL getDailyRegistrationBySerialNumber('" . $sn[$i] . "')"));
+            }
+
+            if (!empty($results)) {
                 $this->set('results', $results);
+            } else {
+                $this->set('results', null);
             }
         } else {
             $this->set('results', null);
         }
     }
+
+    // public function searchByBirthday() {
+    //     $this->set('title_for_layout', '心樂活診所 - 病患資料');
+    //     if (!is_null($this->request->data['Registration']['parm'])) {
+    //         $birthday = $this->request->data['Registration']['parm'];
+    //         $results = $this->Patient->findAllByBirthday($birthday);
+    //         if (empty($results)) {
+    //             $this->set('results', null);
+    //         } else {
+    //             $this->set('results', $results);
+    //         }
+    //     } else {
+    //         $this->set('results', null);
+    //     }
+    // }
 
     private function isExistNextAppointment($id = null) {
 
@@ -488,7 +536,7 @@ class RegistrationsController extends AppController {
 
         $result = $this->Patient->findById($this->request->data['Registration']['patient_id'], array('authorized_company_id'));
         if (empty($result['Patient']['authorized_company_id'])) {
-            $isExist = false;            
+            $isExist = false;
         }
 
         return $isExist;
@@ -498,7 +546,7 @@ class RegistrationsController extends AppController {
 
         $rId = $this->Patient->findById($this->request->data['Registration']['patient_id'], array('authorized_company_id'));
         $result = $this->AuthorizedCompany->findById($rId['Patient']['authorized_company_id'], array('description'));
-        
+
         if (empty($str)) {
             $str = '特約/' . $result['AuthorizedCompany']['description'];
         } else {
