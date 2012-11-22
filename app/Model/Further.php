@@ -11,8 +11,7 @@ class Further extends AppModel {
         )
     );
     public $hasAndBelongsToMany = array(
-        'Registration' =>
-        array(
+        'Registration' => array(
             'className' => 'Registration',
             'joinTable' => 'furthers_registrations',
             'foreignKey' => 'further_id',

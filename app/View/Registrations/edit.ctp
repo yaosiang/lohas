@@ -39,6 +39,11 @@
         'disabled' => true
     ));
 
+    echo $this->Form->input('Doctor', array(
+        'type' => 'select',
+        'label' => '看診醫生',
+    ));
+
     echo $this->Form->input('Identity', array(
         'multiple' => 'checkbox inline',
         'label' => '就診身分'

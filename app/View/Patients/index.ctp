@@ -19,7 +19,7 @@
 <div class="row-fluid">
     <div class="span12">
         <div class="btn-group">
-<?php echo $this->Html->link('新增病患資料', '/patients/add', array('class' => 'btn pull-left', 'icon' => 'plus')); ?>
+            <?php echo $this->Html->link('新增病患資料', '/patients/add', array('class' => 'btn pull-left', 'icon' => 'plus')); ?>
         </div>
     </div>
 </div>
@@ -29,7 +29,7 @@
 <table class="table table-striped">
     <thead>
     <th>掛號証</th>
-    <th>病患姓名</th>
+    <th>病患姓名</th>   
     <th>生日</th>
     <th>聯絡電話</th>
     <th>初診日期</th>
@@ -40,7 +40,7 @@
     <th>刪除病患</th>
 </thead>
 <tbody>
-<?php foreach ($patients as $patient): ?>
+    <?php foreach ($patients as $patient): ?>
         <tr>
             <td><?php echo $patient['Patient']['serial_number']; ?></td>
             <td><?php echo $patient['Patient']['name']; ?></td>

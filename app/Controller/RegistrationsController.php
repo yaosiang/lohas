@@ -3,9 +3,16 @@
 class RegistrationsController extends AppController {
 
     public $helpers = array('Time', 'Xls');
-    public $uses = array('Appointment', 'AuthorizedCompany', 'Bill', 'FollowUp', 'Further', 'Notification',
+    public $uses = array('Appointment', 'AuthorizedCompany', 'Bill', 'Doctor', 'FollowUp', 'Further', 'Notification',
         'Patient', 'Registration', 'TimeSlot');
-    public $components = array('Session');
+    public $components = array('Session',
+        'CakePdf.CakePdf' => array(
+            'prefix' => 'pdf',
+            'layout' => 'CakePdf.pdf',
+            'orientation' => 'L',
+            'paper' => 'A5'
+        )
+    );
 
     public function showDailyRegistration($y = null, $m = null, $d = null) {
 
@@ -16,6 +23,7 @@ class RegistrationsController extends AppController {
         $this->set('year', $y);
         $this->set('month', $m);
         $this->set('day', $d);
+
         $this->set('title_for_layout', '心樂活診所 - 門診資料');
     }
 
@@ -58,8 +66,13 @@ class RegistrationsController extends AppController {
 
             if ($this->Registration->save($this->request->data)) {
 
-                $time_slot_id = $this->TimeSlot->getTimeSlot($this->request->data['Registration']['registration_time']);
+                $time_slot_id = $this->TimeSlot->getTimeSlotId($this->request->data['Registration']['registration_time']);
                 $this->Registration->saveField('time_slot_id', $time_slot_id);
+
+                $doctor_id = $this->Doctor->getDoctorId($this->request->data['Registration']['registration_time'], $time_slot_id);
+
+                $str = 'INSERT INTO doctors_registrations (registration_id, doctor_id) VALUES (' . $this->Registration->id . ', ' . $doctor_id . ');';
+                $this->Registration->query($str);
 
                 $this->Session->setFlash('門診時段已新增！', 'alert', array(
                     'plugin' => 'TwitterBootstrap',
@@ -86,6 +99,7 @@ class RegistrationsController extends AppController {
 
         $this->Registration->id = $id;
 
+        $this->set('doctors', $this->Doctor->find('list', array('fields' => 'id, description')));
         $this->set('identities', $this->Registration->Identity->find('list', array('fields' => array('id', 'description'))));
         $this->set('furthers', $this->Registration->Further->find('list', array('fields' => array('id', 'description'))));
         $this->set('notifications', $this->Notification->find('list', array('fields' => 'id, description')));
@@ -138,7 +152,7 @@ class RegistrationsController extends AppController {
             if ($this->Registration->save($this->request->data)) {
 
                 // 更新門診時間，也要跟著修改診別
-                $this->Registration->saveField('time_slot_id', $this->TimeSlot->getTimeSlot($registration_time));
+                $this->Registration->saveField('time_slot_id', $this->TimeSlot->getTimeSlotId($registration_time));
 
                 // 更新門診時間，上次預約記錄的預約時間也跟著更新
                 $previousAppointmentId = $this->Registration->getPreviousAppointmentId($id);
@@ -157,10 +171,20 @@ class RegistrationsController extends AppController {
                         CakeLog::write('debug', 'RegistrationsController.edit() - 刪除門診資料(' . $id . ')的門診收入');
                     }
                 } else {
+                    $this->Registration->Bill->set('registration_id', $id);
                     $billId = $this->Bill->getBillId($id);
                     if ($billId) {
                         $this->Registration->Bill->id = $billId;
+                        $this->Registration->Bill->save($this->request->data);
 
+                        // 病患有特約商店資格，要設定掛號費為 0，並且備註也要註明
+                        if ($this->isExistAuthorizedCompany()) {
+                            $this->Registration->Bill->saveField('registration_fee', 0);
+
+                            $str = $this->addAuthorizedCompanyToNote($this->request->data['Registration']['note']);
+                            $this->Registration->saveField('note', $str);
+                        }
+                    } else {
                         // 病患有特約商店資格，要設定掛號費為 0，並且備註也要註明
                         if ($this->isExistAuthorizedCompany()) {
                             $this->request->data('Bill.registration_fee', 0);
@@ -168,9 +192,8 @@ class RegistrationsController extends AppController {
                             $str = $this->addAuthorizedCompanyToNote($this->request->data['Registration']['note']);
                             $this->Registration->saveField('note', $str);
                         }
+                        $this->Registration->Bill->save($this->request->data);
                     }
-                    $this->Registration->Bill->set('registration_id', $id);
-                    $this->Registration->Bill->save($this->request->data);
                     CakeLog::write('debug', 'RegistrationsController.edit() - 更新門診資料(' . $id . ')的門診收入');
                 }
 
@@ -216,7 +239,7 @@ class RegistrationsController extends AppController {
                             $this->Registration->save(
                                     array('Registration' => array(
                                             'registration_time' => $this->request->data['Registration']['further_time'],
-                                            'time_slot_id' => $this->TimeSlot->getTimeSlot($this->request->data['Registration']['further_time']),
+                                            'time_slot_id' => $this->TimeSlot->getTimeSlotId($this->request->data['Registration']['further_time']),
                                             'patient_name' => $this->request->data['Registration']['patient_name'],
                                             'patient_id' => $this->request->data['Registration']['patient_id']))
                             );
@@ -376,6 +399,33 @@ class RegistrationsController extends AppController {
         $this->set('day', $d);
     }
 
+    public function downloadDailyRegistrationByDoctor($y = null, $m = null, $d = null, $id = null) {
+
+        $date = date("Y-m-d", mktime(0, 0, 0, (is_null($m) ? $m = date("m") : $m), (is_null($d) ? $d = date("d") : $d), (is_null($y) ? $y = date("Y") : $y)
+                ));
+        $results = $this->Registration->query("CALL getDailyRegistrationByDoctor('" . $date . "', '" . $id . "')");
+        $this->set('results', $results);
+        $this->set('year', $y);
+        $this->set('month', $m);
+        $this->set('day', $d);
+        $this->set('id', $id);
+    }
+
+    public function pdf_print($id = null) {
+
+        $this->Registration->id = $id;
+        $this->Patient->id = $this->Registration->field('patient_id');
+        $result = $this->Registration->query('SELECT appointment_time FROM furthers_appointment_time WHERE registration_id = ' . $id);
+        $appointment_time = $result[0]['furthers_appointment_time']['appointment_time'];
+
+        $this->set('serial_number', $this->Patient->field('serial_number'));
+        $this->set('name', $this->Registration->field('patient_name'));
+        $this->set('appointment_time', $appointment_time);
+        $this->set('doctor', '范庭瑋');
+
+        $this->CakePdf->setFilename($this->Patient->field('serial_number'));
+    }
+
     public function search() {
 
         $this->set('title_for_layout', '心樂活診所 - 門診資料');
@@ -428,20 +478,20 @@ class RegistrationsController extends AppController {
         }
     }
 
-    // public function searchByBirthday() {
-    //     $this->set('title_for_layout', '心樂活診所 - 病患資料');
-    //     if (!is_null($this->request->data['Registration']['parm'])) {
-    //         $birthday = $this->request->data['Registration']['parm'];
-    //         $results = $this->Patient->findAllByBirthday($birthday);
-    //         if (empty($results)) {
-    //             $this->set('results', null);
-    //         } else {
-    //             $this->set('results', $results);
-    //         }
-    //     } else {
-    //         $this->set('results', null);
-    //     }
-    // }
+    public function searchByBirthday() {
+        $this->set('title_for_layout', '心樂活診所 - 病患資料');
+        if (!is_null($this->request->data['Registration']['parm'])) {
+            $birthday = $this->request->data['Registration']['parm'];
+            $results = $this->Patient->findAllByBirthday($birthday);
+            if (empty($results)) {
+                $this->set('results', null);
+            } else {
+                $this->set('results', $results);
+            }
+        } else {
+            $this->set('results', null);
+        }
+    }
 
     private function isExistNextAppointment($id = null) {
 

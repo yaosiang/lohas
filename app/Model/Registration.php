@@ -19,6 +19,11 @@ class Registration extends AppModel {
             'message' => 'Numbers only',
             'allowEmpty' => true
         ),
+        'doctor' => array(
+            'rule' => array('maxLength', '512'),
+            'message' => '最大不能超過 512 個字',
+            'allowEmpty' => true
+        ),
         'note' => array(
             'rule' => array('maxLength', '1024'),
             'message' => '最大不能超過 1024 個字',
@@ -60,6 +65,14 @@ class Registration extends AppModel {
             'joinTable' => 'furthers_registrations',
             'foreignKey' => 'registration_id',
             'associationForeignKey' => 'further_id',
+            'unique' => true
+        ),
+        'Doctor' =>
+        array(
+            'className' => 'Doctor',
+            'joinTable' => 'doctors_registrations',
+            'foreignKey' => 'registration_id',
+            'associationForeignKey' => 'doctor_id',
             'unique' => true
         ),
     );

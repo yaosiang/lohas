@@ -4,16 +4,16 @@
     </div>
     <div class="span8">
         <?php
-        echo $this->Form->create('Appointment', array('class' => 'form-search pull-right', 'action' => 'searchByBirthday'));
+        echo $this->Form->create('Appointment', array('class' => 'form-search pull-right', 'action' => 'searchSerialNumber'));
         echo $this->Form->input('parm', array(
             'type' => 'text',
-            'placeholder' => '生日',
+            'placeholder' => '姓名 or 生日',
         ));
         echo $this->Form->button('找掛號證', array(
             'type' => 'submit',
             'class' => 'btn'
         ));
-        echo $this->Html->para(null, '請輸入生日');
+        echo $this->Html->para(null, '請輸入姓名 or 生日');
         echo $this->Form->end();
         ?>
     </div>    
@@ -23,7 +23,7 @@
 
 <?php
 if (is_null($results)) {
-    echo $this->Html->div('alert alert-block', '找不到耶！生日打錯了嗎？');
+    echo $this->Html->div('alert alert-block', '找不到耶！打錯字了嗎？');
 }
 ?>
 
@@ -59,12 +59,6 @@ if (!is_null($results)) {
                 <?php
                     echo $this->Html->link('新增預約記錄', array(
                         'controller' => 'appointments',
-                        'action' => 'add', (int) $result['Patient']['serial_number']));
-                ?>
-                </td>
-                <td>
-                <?php
-                    echo $this->Html->link('新增門診資料', array(
                         'action' => 'add', (int) $result['Patient']['serial_number']));
                 ?>
                 </td>

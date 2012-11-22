@@ -14,6 +14,7 @@ $this->Xls->setWorkSheetName('DailyRegistration');
 $this->Xls->openRow();
 $this->Xls->writeString('診別');
 $this->Xls->writeString('門診時間');
+$this->Xls->writeString('醫師');
 $this->Xls->writeString('病患姓名');
 $this->Xls->writeString('掛號証');
 $this->Xls->writeString('就診身分');
@@ -32,6 +33,7 @@ foreach ($results as $result):
     $this->Xls->openRow();
     $this->Xls->writeString($result['time_slots']['time_slot']);
     $this->Xls->writeString($result['registrations']['registration_time']);
+    $this->Xls->writeString($result['doctors']['doctor']);
     $this->Xls->writeString($result['registrations']['patient_name']);
     $this->Xls->writeString($result['patients']['serial_number']);
     $this->Xls->writeString($result['concated_identities']['identities']);
@@ -48,5 +50,4 @@ endforeach;
 
 $this->Xls->addXmlFooter();
 exit();
-
 ?> 

@@ -16,7 +16,7 @@ class TimeSlot extends AppModel {
         )
     );
 
-    public function getTimeSlot($datetime) {
+    public function getTimeSlotId($datetime) {
 
         // 1 means 早
         // 2 menas 午

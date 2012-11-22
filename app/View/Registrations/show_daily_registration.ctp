@@ -67,16 +67,19 @@ $count = 1;
 <div class="btn-group">
     <?php echo $this->Html->link('新增門診資料', '/registrations/add', array('class' => 'btn pull-left', 'icon' => 'plus')); ?>
     <?php echo $this->Html->link('匯出當日門診', '/registrations/downloadDailyRegistration/' . $year . '/' . $month . '/' . $day, array('class' => 'btn pull-left', 'icon' => 'download')); ?>
+    <?php echo $this->Html->link('匯出范醫師門診', '/registrations/downloadDailyRegistrationByDoctor/' . $year . '/' . $month . '/' . $day . '/' . 1, array('class' => 'btn pull-left', 'icon' => 'download')); ?>
+    <?php echo $this->Html->link('匯出簡醫師門診', '/registrations/downloadDailyRegistrationByDoctor/' . $year . '/' . $month . '/' . $day . '/' . 2, array('class' => 'btn pull-left', 'icon' => 'download')); ?>
 </div>        
 
 <hr />
 
-<table class="table table-striped">
+<table class="table">
     <thead>
     <th>序號</th>
     <th>診別</th>
     <th>時間</th>
-    <th>病患姓名</th>
+    <th>醫師</th>
+    <th>病患</th>
     <th>掛號證</th>
     <th>就診身分</th>
     <th>掛號費</th>
@@ -90,74 +93,91 @@ $count = 1;
     <th>建立病患</th>
     <th>編輯</th>
     <th>刪除</th>
+    <th>預約單</th>
 </thead>
 <tbody>
     <?php foreach ($results as $result): ?>
-        <tr>
-            <td><?php echo $count++; ?></td>
-            <td><?php echo $result['time_slots']['time_slot']; ?></td>
-            <td><?php echo $this->Time->format('h:i A', $result['registrations']['registration_time']); ?></td>
-            <td><?php echo $result['registrations']['patient_name']; ?></td>
-            <td>
-                <?php
-                if (!is_null($result['patients']['serial_number'])) {
-                    echo (int) $result['patients']['serial_number'];
-                } else {
-                    '';
-                }
-                ?>
-            <td>
-                <?php
-                if (!isset($result['concated_identities']['identities'])) {
-                    echo '';
-                } else {
-                    echo $result['concated_identities']['identities'];
-                }
-                ?></td>
-            <td><?php echo $result['bills']['registration_fee']; ?></td>
-            <td><?php echo $result['bills']['copayment']; ?></td>
-            <td><?php echo $result['bills']['drug_expense']; ?></td>
-            <td><?php echo $result['bills']['own_expense']; ?></td>
-            <td><?php echo $result['furthers']['description']; ?></td>
-            <td>
-                <?php
-                if (!is_null($result['furthers_appointment_time']['appointment_time'])) {
-                    echo $this->Time->format('Y-m-d', $result['furthers_appointment_time']['appointment_time']);
-                }
-                ?>
-            </td>
-            <td>
-                <?php
-                if (!is_null($result['furthers_follow_up_time']['follow_up_time'])) {
-                    echo $this->Time->format('Y-m-d', $result['furthers_follow_up_time']['follow_up_time']);
-                }
-                ?>
-            </td>
-            <td><?php echo $result['registrations']['note']; ?></td>
-            <td>
-                <?php
-                if (strlen($result['registrations']['patient_id']) == 0) {
-                    echo $this->Html->link('新增病患', array(
-                        'controller' => 'patients',
-                        'action' => 'add', $result['registrations']['id'], $result['registrations']['patient_name']));
-                }
-                ?>
-            </td>
-            <td>
-                <?php
-                if (strlen($result['registrations']['patient_id']) != 0) {
-                    echo $this->Html->link('編輯', array(
-                        'action' => 'edit', $result['registrations']['id']));
-                }
-                ?>
-            </td>
-            <td>
-                <?php
-                echo $this->Form->postLink('刪除', array('action' => 'delete', $result['registrations']['id']), array('confirm' => '確定要刪除嗎?'));
-                ?>
-            </td>
-        </tr>
-    <?php endforeach; ?>
+        <?php
+        if (strcmp($result['doctors']['doctor'], '范庭瑋') == 0 ||
+                strcmp($result['doctors']['doctor'], '') == 0) {
+            echo "<tr style=\"background-color: #CCFF99;\">";
+        } else {
+            echo "<tr style=\"background-color: #99CCFF;\">";
+        }
+        ?>
+    <td><?php echo $count++; ?></td>
+    <td><?php echo $result['time_slots']['time_slot']; ?></td>
+    <td><?php echo $this->Time->format('h:i A', $result['registrations']['registration_time']); ?></td>
+    <td><?php echo $result['doctors']['doctor']; ?></td>
+    <td><?php echo $result['registrations']['patient_name']; ?></td>
+    <td>
+        <?php
+        if (!is_null($result['patients']['serial_number'])) {
+            echo (int) $result['patients']['serial_number'];
+        } else {
+            '';
+        }
+        ?>
+    <td>
+        <?php
+        if (!isset($result['concated_identities']['identities'])) {
+            echo '';
+        } else {
+            echo $result['concated_identities']['identities'];
+        }
+        ?></td>
+    <td><?php echo $result['bills']['registration_fee']; ?></td>
+    <td><?php echo $result['bills']['copayment']; ?></td>
+    <td><?php echo $result['bills']['drug_expense']; ?></td>
+    <td><?php echo $result['bills']['own_expense']; ?></td>
+    <td><?php echo $result['furthers']['description']; ?></td>
+    <td>
+        <?php
+        if (!is_null($result['furthers_appointment_time']['appointment_time'])) {
+            echo $this->Time->format('Y-m-d', $result['furthers_appointment_time']['appointment_time']);
+        }
+        ?>
+    </td>
+    <td>
+        <?php
+        if (!is_null($result['furthers_follow_up_time']['follow_up_time'])) {
+            echo $this->Time->format('Y-m-d', $result['furthers_follow_up_time']['follow_up_time']);
+        }
+        ?>
+    </td>
+    <td><?php echo $result['registrations']['note']; ?></td>
+    <td>
+        <?php
+        if (strlen($result['registrations']['patient_id']) == 0) {
+            echo $this->Html->link('新增病患', array(
+                'controller' => 'patients',
+                'action' => 'add', $result['registrations']['id'], $result['registrations']['patient_name']));
+        }
+        ?>
+    </td>
+    <td>
+        <?php
+        if (strlen($result['registrations']['patient_id']) != 0) {
+            echo $this->Html->link('編輯', array(
+                'action' => 'edit', $result['registrations']['id']));
+        }
+        ?>
+    </td>
+    <td>
+        <?php
+        echo $this->Form->postLink('刪除', array('action' => 'delete', $result['registrations']['id']), array('confirm' => '確定要刪除嗎?'));
+        ?>
+    </td>
+    <td>
+        <?php
+        $printLinkStr = '/pdf/registrations/print/' . $result['registrations']['id'];
+        if (!is_null($result['furthers_appointment_time']['appointment_time'])) {
+            echo $this->Html->link('列印', $printLinkStr);
+        }
+        ?>
+    </td>
+    </tr>
+<?php endforeach; ?>
 </tbody>
 
 </table>

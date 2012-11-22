@@ -11,8 +11,7 @@ class Identity extends AppModel {
         )
     );
     public $hasAndBelongsToMany = array(
-        'Registration' =>
-        array(
+        'Registration' => array(
             'className' => 'Registration',
             'joinTable' => 'identities_registrations',
             'foreignKey' => 'identity_id',

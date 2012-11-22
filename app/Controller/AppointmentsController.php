@@ -3,7 +3,7 @@
 class AppointmentsController extends AppController {
 
     public $helpers = array('Time');
-    public $uses = array('Appointment', 'AppointmentContact', 'FollowUp', 'Notification', 'Registration', 'TimeSlot');
+    public $uses = array('Appointment', 'AppointmentContact', 'Doctor', 'FollowUp', 'Notification', 'Registration', 'TimeSlot');
     public $components = array('Session');
 
     public function showDailyAppointment($y = null, $m = null, $d = null) {
@@ -16,6 +16,9 @@ class AppointmentsController extends AppController {
         $this->set('month', $m);
         $this->set('day', $d);
         $this->set('title_for_layout', '心樂活診所 - 預約記錄');
+
+        $this->set('timeslot', $this->TimeSlot);
+        $this->set('doctor', $this->Doctor);
     }
 
     public function add($serial_number = null) {
@@ -77,7 +80,7 @@ class AppointmentsController extends AppController {
                 // 準備門診資料的資料
                 $registration_data[] = array('Registration' => array(
                         'registration_time' => $appointment_data[$i]['Appointment']['appointment_time'],
-                        'time_slot_id' => $this->TimeSlot->getTimeSlot($appointment_data[$i]['Appointment']['appointment_time']),
+                        'time_slot_id' => $this->TimeSlot->getTimeSlotId($appointment_data[$i]['Appointment']['appointment_time']),
                         'patient_name' => $appointment_data[$i]['Appointment']['contact_name'],
                         'patient_phone' => $appointment_data[$i]['Appointment']['contact_phone'],
                         'patient_id' => $patient_id
@@ -160,7 +163,7 @@ class AppointmentsController extends AppController {
                         $this->Registration->id = $this->Appointment->getNextRegistrationId($id);
                         $this->Registration->saveField('registration_time', $appointment_time);
                         $this->Registration->saveField('patient_name', $this->request->data['Appointment']['contact_name']);
-                        $this->Registration->saveField('time_slot_id', $this->TimeSlot->getTimeSlot($appointment_time));
+                        $this->Registration->saveField('time_slot_id', $this->TimeSlot->getTimeSlotId($appointment_time));
                         CakeLog::write('debug', 'AppointmentsController.edit() - 更新預約記錄(' . $id . ')連結的門診資料(' . $this->Registration->id . ')');
                     }
 
@@ -292,27 +295,46 @@ class AppointmentsController extends AppController {
 
         $this->redirect(array('action' => 'showDailyAppointment', $date->format('Y'), $date->format('m'), $date->format('d')));
     }
-    
-    // public function searchByBirthday() {
 
-    //     $this->set('title_for_layout', '心樂活診所 - 病患資料');
+    public function searchSerialNumber() {
 
-    //     if (!is_null($this->request->data['Appointment']['parm'])) {
+        $this->set('title_for_layout', '心樂活診所 - 搜尋掛號證');
 
-    //         $birthday = $this->request->data['Appointment']['parm'];
+        if (!is_null($this->request->data['Appointment']['parm'])) {
 
-    //         $this->loadModel('Patient');            
-    //         $results = $this->Patient->findAllByBirthday($birthday);
+            $this->loadModel('Patient');
+            $patients = $this->Patient->find('list', array(
+                'conditions' => array('Patient.name LIKE' => '%' . $this->request->data['Appointment']['parm'] . '%'),
+                'fields' => array('serial_number'),
+                'order' => array('Patient.serial_number DESC')
+                ));
 
-    //         if (empty($results)) {
-    //             $this->set('results', null);
-    //         } else {
-    //             $this->set('results', $results);
-    //         }
-    //     } else {
-    //         $this->set('results', null);
-    //     }
-    // }
+            if (empty($patients)) {
+                $patients = $this->Patient->find('list', array(
+                    'conditions' => array('Patient.birthday' => $this->request->data['Appointment']['parm']),
+                    'fields' => array('serial_number'),
+                    'order' => array('Patient.serial_number DESC')
+                    ));                
+                if (empty($patients)) {
+                    $this->set('results', null);
+                }
+            }
+
+            $sn = array_values($patients);
+            $results = array();
+            for ($i = 0; $i < sizeof($sn); $i++) {
+                array_push($results, $this->Patient->findAllBySerialNumber($sn[$i]));
+            }
+
+            if (!empty($results)) {
+                $this->set('results', $results);
+            } else {
+                $this->set('results', null);
+            }
+        } else {
+            $this->set('results', null);
+        }
+    }
 
     public function search() {
 
