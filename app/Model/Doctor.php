@@ -27,46 +27,46 @@ class Doctor extends AppModel {
         $dayOfWeek = intval($dayOfWeek);
         $slot = intval($slot);
 
-        return 1;
-        // switch ($dayOfWeek) {
-        //     case 1:
-        //         if ($slot == 1) {
-        //             return 2;
-        //         } else {
-        //             return 1;
-        //         }
-        //         break;
-        //     case 2:
-        //         if ($slot == 3) {
-        //             return 2;
-        //         } else {
-        //             return 1;
-        //         }
-        //         break;
-        //     case 3:
-        //         if ($slot == 1) {
-        //             return 2;
-        //         } else {
-        //             return 1;
-        //         }
-        //         break;
-        //     case 4:
-        //         if ($slot == 2) {
-        //             return 2;
-        //         } else {
-        //             return 1;
-        //         }
-        //         break;
-        //     case 5:
-        //         if ($slot == 1) {
-        //             return 2;
-        //         } else {
-        //             return 1;
-        //         }
-        //         break;
-        //     default:
-        //         return 1;
-        // }
+        // return 1;
+        switch ($dayOfWeek) {
+            case 1:
+                if ($slot == 1) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+                break;
+            case 2:
+                if ($slot == 3) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+                break;
+            case 3:
+                if ($slot == 1) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+                break;
+            case 4:
+                if ($slot == 2) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+                break;
+            case 5:
+                if ($slot == 1) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+                break;
+            default:
+                return 1;
+        }
     }
 
 }

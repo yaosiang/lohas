@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 class RegistrationsController extends AppController {
 
@@ -408,7 +408,7 @@ class RegistrationsController extends AppController {
         $this->set('year', $y);
         $this->set('month', $m);
         $this->set('day', $d);
-        $this->set('id', $id);
+        $this->set('doctor', $doctor);
     }
 
     public function pdf_print($id = null) {
@@ -472,21 +472,6 @@ class RegistrationsController extends AppController {
                 $this->set('results', $results);
             } else {
                 $this->set('results', null);
-            }
-        } else {
-            $this->set('results', null);
-        }
-    }
-
-    public function searchByBirthday() {
-        $this->set('title_for_layout', '心樂活診所 - 病患資料');
-        if (!is_null($this->request->data['Registration']['parm'])) {
-            $birthday = $this->request->data['Registration']['parm'];
-            $results = $this->Patient->findAllByBirthday($birthday);
-            if (empty($results)) {
-                $this->set('results', null);
-            } else {
-                $this->set('results', $results);
             }
         } else {
             $this->set('results', null);

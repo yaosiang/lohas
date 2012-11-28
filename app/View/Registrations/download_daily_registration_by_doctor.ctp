@@ -5,13 +5,6 @@
  * with the help of the xlsHelper
  */
 //input the export file name
-
-if (intval($id) == 1) {
-    $doctor = '范庭瑋';
-} else {
-    $doctor = '簡崇暐';
-}
-
 $this->Xls->setHeader('Registration_' . $year . '-' . $month . '-' . $day . '_' . $doctor);
 
 $this->Xls->addXmlHeader();

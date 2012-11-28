@@ -150,9 +150,21 @@
                                 } else {
                                     echo '<li>';
                                 }
-                                echo $this->Html->link('簡訊提醒', '/calllists/showCallList', array('icon' => 'envelope'));
+                                echo $this->Html->link('簡訊提醒', '/calllists/showCallList', array('icon' => 'bell'));
                             ?>
                             </li>
+                            <!--
+                            <?php
+                                if (preg_match("/\/lohas\/sendlists/", $this->request->here) ||
+                                    preg_match("/\/lohas\/SendLists/", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
+                                echo $this->Html->link('發送簡訊', '/calllists/showSendList', array('icon' => 'envelope'));
+                            ?>
+                            </li>
+                            -->
                             <li class="divider"></li>
                             <li class="nav-header">相關統計數據</li>							
                             <?php

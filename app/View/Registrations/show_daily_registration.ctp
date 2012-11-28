@@ -55,10 +55,10 @@ $count = 1;
         echo $this->Form->create('Registration', array('class' => 'well form-search pull-right', 'action' => 'search'));
         echo $this->Form->input('parm', array(
             'type' => 'text',
-            'placeholder' => '姓名 or 掛號証 or 生日',
+            'placeholder' => '姓名 or 掛號證 or 生日',
             'append' => array('找門診', array('wrap' => 'button', 'class' => 'btn', 'type' => 'submit')),
         ));
-        echo $this->Html->para(null, '請輸入姓名 or 掛號証 or 生日');
+        echo $this->Html->para(null, '請輸入姓名 or 掛號證 or 生日');
         echo $this->Form->end();
         ?>
     </div>    
@@ -73,7 +73,7 @@ $count = 1;
 
 <hr />
 
-<table class="table">
+<table class="table table-hover">
     <thead>
     <th>序號</th>
     <th>診別</th>
@@ -100,9 +100,11 @@ $count = 1;
         <?php
         if (strcmp($result['doctors']['doctor'], '范庭瑋') == 0 ||
                 strcmp($result['doctors']['doctor'], '') == 0) {
-            echo "<tr style=\"background-color: #CCFF99;\">";
+            echo "<tr>";
+            // echo "<tr style=\"background-color: #CCFF99;\">";
         } else {
-            echo "<tr style=\"background-color: #99CCFF;\">";
+            echo "<tr>";
+            // echo "<tr style=\"background-color: #99CCFF;\">";
         }
         ?>
     <td><?php echo $count++; ?></td>
