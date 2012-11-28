@@ -399,15 +399,22 @@ class RegistrationsController extends AppController {
         $this->set('day', $d);
     }
 
-    public function downloadDailyRegistrationByDoctor($y = null, $m = null, $d = null, $id = null) {
+    public function downloadDailyRegistrationByDoctor($y = null, $m = null, $d = null, $doctor_id = null) {
 
         $date = date("Y-m-d", mktime(0, 0, 0, (is_null($m) ? $m = date("m") : $m), (is_null($d) ? $d = date("d") : $d), (is_null($y) ? $y = date("Y") : $y)
                 ));
-        $results = $this->Registration->query("CALL getDailyRegistrationByDoctor('" . $date . "', '" . $id . "')");
+        $results = $this->Registration->query("CALL getDailyRegistrationByDoctor('" . $date . "', '" . $doctor_id . "')");
         $this->set('results', $results);
         $this->set('year', $y);
         $this->set('month', $m);
         $this->set('day', $d);
+
+        $this->Doctor->id = $doctor_id;
+        if (strcmp($this->Doctor->field('description'), '范庭瑋') == 0) {
+            $doctor = 'Fan';
+        } else {
+            $doctor = 'Jian';
+        }
         $this->set('doctor', $doctor);
     }
 
@@ -421,7 +428,16 @@ class RegistrationsController extends AppController {
         $this->set('serial_number', $this->Patient->field('serial_number'));
         $this->set('name', $this->Registration->field('patient_name'));
         $this->set('appointment_time', $appointment_time);
-        $this->set('doctor', '范庭瑋');
+
+        $time_slot_id = $this->TimeSlot->getTimeSlotId($appointment_time);
+        $doctor_id = $this->Doctor->getDoctorId($appointment_time, $time_slot_id);
+
+        if ($doctor_id == 1) {
+            $doctor = 'Fan';
+        } else {
+            $doctor = 'Jian';
+        }
+        $this->set('doctor', $doctor);
 
         $this->CakePdf->setFilename($this->Patient->field('serial_number'));
     }

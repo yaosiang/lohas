@@ -60,6 +60,7 @@
             <h3 id="myModalLabel">編輯待發送簡訊</h3>
         </div>
         <div class="modal-body">
+            <p>沒有聯絡電話的資訊，將不會被寄出！</p>
             <fieldset>
             <table class="table table-striped">
                 <thead>
