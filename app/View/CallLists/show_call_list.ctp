@@ -106,9 +106,48 @@
                             'class' => 'input-medium',
                             'value' => ''
                         )); ?>
-                    </td>                            
+                    </td>
                     </tr>
                 <?php endforeach; ?>
+                <?php for ($i = 0; $i < 12; $i++) { ?>
+                    <tr>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'span10',
+                            'value' => ''
+                        )); ?>
+                    </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'span8',
+                            'value' => ''
+                        )); ?>
+                    </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'span4',
+                            'value' => ''
+                        )); ?>
+                    </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'span6',
+                            'value' => ''
+                        )); ?>
+                    </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'input-medium',
+                            'value' => ''
+                        )); ?>
+                    </td>
+                    </tr>                  
+                <?php } ?>
             </tbody>
             </table>
             </fieldset>
