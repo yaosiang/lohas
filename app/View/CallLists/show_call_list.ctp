@@ -48,7 +48,7 @@
         <div class="btn-group">
             <?php echo $this->Html->link('匯出簡訊專用CSV檔', '/call_lists/downloadCallList/' . $year . '/' . $month . '/' . $day, array('class' => 'btn pull-left', 'target' => '_blank', 'icon' => 'download')); ?>
             <?php echo $this->Html->link('寄送簡訊', '#myModal', array('class' => 'btn', 'role' => 'button', 'icon' => 'envelope', 'data-toggle' => 'modal')); ?>
-            <?php echo $this->Html->link('簡訊剩餘筆數', 'http://www.smsgo.com.tw/sms_gw/query_point.asp?username=fannyflutes@gmail.com&password=224103324', array('class' => 'btn', 'target' => '_blank', 'icon' => 'retweet')); ?>
+            <?php echo $this->Html->link('簡訊剩餘筆數', 'http://www.smsgo.com.tw/sms_gw/query_point.asp?username=fannyflutes@gmail.com&password=2383636', array('class' => 'btn', 'target' => '_blank', 'icon' => 'retweet')); ?>
         </div>
     </div>
         
