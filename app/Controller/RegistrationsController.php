@@ -225,7 +225,7 @@ class RegistrationsController extends AppController {
                             $this->Registration->saveField('time_slot_id', $time_slot_id);
                             
                             $doctor_id = $this->Doctor->getDoctorId($this->request->data['Registration']['further_time'], $time_slot_id);
-                            $str = 'INSERT INTO doctors_registrations (registration_id, doctor_id) VALUES (' . $this->Registration->id . ', ' . $doctor_id . ');';
+                            $str = 'UPDATE doctors_registrations SET doctor_id = ' . $doctor_id . ' WHERE registration_id = ' . $this->Registration->id . ';';
                             $this->Registration->query($str);
 
                             CakeLog::write('debug', 'RegistrationsController.edit() - 更新門診資料(' . $id . ')連結的下次預約記錄(' . $this->Appointment->id . ')' . '連結的門診資料(' . $this->Registration->id . ')的門診時間');
