@@ -107,11 +107,9 @@ $count = 1;
         $doctor_id = $doctor->getDoctorId($result['appointments']['appointment_time'], $time_slot_id);
 
         if ($doctor_id == 1) {
-            echo "<tr>";
-            // echo "<tr style=\"background-color: #CCFF99;\">";
+            echo "<tr style=\"background-color: #CCFF99;\">";
         } else {
-            echo "<tr>";
-            // echo "<tr style=\"background-color: #99CCFF;\">";
+            echo "<tr style=\"background-color: #99CCFF;\">";
         }
         ?>
     <td><?php echo $count++; ?></td>

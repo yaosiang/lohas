@@ -104,6 +104,8 @@ class RegistrationsController extends AppController {
         $this->set('furthers', $this->Registration->Further->find('list', array('fields' => array('id', 'description'))));
         $this->set('notifications', $this->Notification->find('list', array('fields' => 'id, description')));
 
+        $this->set('company', $this->AuthorizedCompany);
+
         // 檢查是否有下次預約時間的資料，有的話就塞進 view
         $hasNextAppointment = $this->isExistNextAppointment($id);
         // 檢查是否有放入追蹤名單的資料，有的話就塞進 view
@@ -218,6 +220,14 @@ class RegistrationsController extends AppController {
                             // 更新下次預約記錄連結的門診資料的門診時間
                             $this->Registration->id = $this->Appointment->getNextRegistrationId($nextAppointmentId);
                             $this->Registration->saveField('registration_time', $this->request->data['Registration']['further_time']);
+
+                            $time_slot_id = $this->TimeSlot->getTimeSlotId($this->request->data['Registration']['further_time']);
+                            $this->Registration->saveField('time_slot_id', $time_slot_id);
+                            
+                            $doctor_id = $this->Doctor->getDoctorId($this->request->data['Registration']['further_time'], $time_slot_id);
+                            $str = 'INSERT INTO doctors_registrations (registration_id, doctor_id) VALUES (' . $this->Registration->id . ', ' . $doctor_id . ');';
+                            $this->Registration->query($str);
+
                             CakeLog::write('debug', 'RegistrationsController.edit() - 更新門診資料(' . $id . ')連結的下次預約記錄(' . $this->Appointment->id . ')' . '連結的門診資料(' . $this->Registration->id . ')的門診時間');
                         } else {
 
@@ -243,6 +253,11 @@ class RegistrationsController extends AppController {
                                             'patient_name' => $this->request->data['Registration']['patient_name'],
                                             'patient_id' => $this->request->data['Registration']['patient_id']))
                             );
+                            $time_slot_id = $this->TimeSlot->getTimeSlotId($this->request->data['Registration']['further_time']);
+                            $doctor_id = $this->Doctor->getDoctorId($this->request->data['Registration']['further_time'], $time_slot_id);
+                            $str = 'INSERT INTO doctors_registrations (registration_id, doctor_id) VALUES (' . $this->Registration->id . ', ' . $doctor_id . ');';
+                            $this->Registration->query($str);
+                            
                             CakeLog::write('debug', 'RegistrationsController.edit() - 建立門診資料(' . $id . ')連結的下次預約記錄(' . $this->Appointment->id . ')連結的門診資料(' . $this->Registration->id . ')');
                             $this->Registration->setPreviousAppointment($this->Registration->id, $this->Appointment->id);
                             CakeLog::write('debug', 'RegistrationsController.edit() - 建立門診資料(' . $id . ')連結的下次預約記錄(' . $this->Appointment->id . ')連結的門診資料(' . $this->Registration->id . ')與下次預約記錄的關係');

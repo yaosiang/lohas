@@ -85,6 +85,7 @@ class AppointmentsController extends AppController {
                         'patient_phone' => $appointment_data[$i]['Appointment']['contact_phone'],
                         'patient_id' => $patient_id
                         ));
+                $time_slot_id = $this->TimeSlot->getTimeSlotId($appointment_data[$i]['Appointment']['appointment_time']);
 
                 $this->Appointment->create();
                 $this->Registration->create();
@@ -97,6 +98,10 @@ class AppointmentsController extends AppController {
 
                     $this->Appointment->setNextRegistration($this->Registration->id, $this->Appointment->id);
                     CakeLog::write('debug', 'AppointmentsController.add() - 建立預約記錄(' . $this->Appointment->id . ')與預約記錄連結的門診資料(' . $this->Registration->id . ')的關係');
+
+                    $doctor_id = $this->Doctor->getDoctorId($appointment_data[$i]['Appointment']['appointment_time'], $time_slot_id);
+                    $str = 'INSERT INTO doctors_registrations (registration_id, doctor_id) VALUES (' . $this->Registration->id . ', ' . $doctor_id . ');';
+                    $this->Registration->query($str);
 
                     $this->Session->setFlash('預約時段已新增！', 'alert', array(
                         'plugin' => 'TwitterBootstrap',

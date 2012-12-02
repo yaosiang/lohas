@@ -100,11 +100,9 @@ $count = 1;
         <?php
         if (strcmp($result['doctors']['doctor'], '范庭瑋') == 0 ||
                 strcmp($result['doctors']['doctor'], '') == 0) {
-            echo "<tr>";
-            // echo "<tr style=\"background-color: #CCFF99;\">";
+            echo "<tr style=\"background-color: #CCFF99;\">";
         } else {
-            echo "<tr>";
-            // echo "<tr style=\"background-color: #99CCFF;\">";
+            echo "<tr style=\"background-color: #99CCFF;\">";
         }
         ?>
     <td><?php echo $count++; ?></td>

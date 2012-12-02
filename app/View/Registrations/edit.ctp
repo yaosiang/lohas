@@ -48,7 +48,18 @@
         'multiple' => 'checkbox inline',
         'label' => '就診身分'
     ));
-    
+
+    if (!empty($this->request->data['Patient']['authorized_company_id'])) {
+        $company->id = $this->request->data['Patient']['authorized_company_id'];
+        echo $this->Form->input(uniqid(), array(
+            'id' => 'Company',
+            'value' => $company->field('description'),
+            'label' => '',
+            'type' => 'text',
+            'class' => 'span2 btn btn-warning',
+        ));
+    }
+
     echo $this->Form->input(uniqid(), array(
         'id' => 'ForFree',
         'value' => '不收錢',
