@@ -28,7 +28,7 @@ class TimeSlot extends AppModel {
         $eveningStart = new Datetime($datetime);
 
         $morningEnd->setTime(12, 0, 0);
-        $eveningStart->setTime(17, 30, 0);
+        $eveningStart->setTime(17, 45, 0);
 
         if ($date > $morningEnd) {
             if ($date > $eveningStart) {

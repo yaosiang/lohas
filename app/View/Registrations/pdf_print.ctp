@@ -1,4 +1,6 @@
 <?php
+ob_clean();
+
 $date = new DateTime($appointment_time);
 if ($date->format('N') == 1) {
     $weekday = '一';
@@ -16,22 +18,6 @@ if ($date->format('N') == 1) {
     $weekday = '日';
 }
 
-if (strcmp($date->format('a'), 'am')) {
-    $meridiem = '下午';
-
-    // PM 6:30 以後，改用晚上
-    if (intval($date->format('g')) > 6) {
-        $meridiem = '晚上';
-    }
-
-    if (intval($date->format('g')) == 6) {
-        if (intval($date->format('i')) == 00) {
-            $meridiem = '晚上';
-        }
-    }
-} else {
-    $meridiem = '上午';
-}
 ?>
 <div class="row">
     心樂活診所預約回診單<br />
@@ -49,7 +35,7 @@ if (strcmp($date->format('a'), 'am')) {
                     <td>回診日期：<?php echo $this->Time->format('Y', $appointment_time) . ' 年 ' . $this->Time->format('m', $appointment_time) . ' 月 ' . $this->Time->format('d', $appointment_time) . ' 日 星期' . $weekday ?></td>
                 </tr>
                 <tr>
-                    <td>回診時間：<?php echo $meridiem . ' ' . $this->Time->format('g:i', $appointment_time); ?></td>
+                    <td>回診時間：<?php echo $this->Time->format('G:i', $appointment_time); ?></td>                    
                 </tr>
                 <tr><td></td></tr>
                 <tr>
