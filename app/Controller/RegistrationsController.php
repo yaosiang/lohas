@@ -1,4 +1,4 @@
- <?php
+<?php
 
 class RegistrationsController extends AppController {
 
@@ -61,6 +61,25 @@ class RegistrationsController extends AppController {
                     $this->request->data('Registration.patient_id', $result['Patient']['id']);
                     $this->request->data('Registration.patient_name', $result['Patient']['name']);
                     CakeLog::write('debug', 'RegistrationsController.add() - 掛號證 ' . $serial_number . ' 存在，取出 id 與病患姓名');
+
+                    // 判斷是否未來已經有預約門診
+                    $future_reg = $this->Registration->find('list', array(
+                            'conditions' => array(
+                                'Registration.patient_id' => $result['Patient']['id'], 
+                                'Registration.registration_time > ' => date('Y-m-d H:i:s')
+                                ),
+                            'fields' => 'registration_time',
+                                ));
+                    $reg_time_str = '';
+                    if (!empty($future_reg)) {
+                        $is_exist_future_reg = true;
+                        $future_reg = array_values($future_reg);
+                        for ($i = 0; $i < sizeof($future_reg); $i++) {
+                            $reg_time_str = $reg_time_str . $future_reg[$i] . '<br />';
+                        }
+                    } else {
+                        $is_exist_future_reg = false;
+                    }
                 }
             }
 
@@ -74,10 +93,17 @@ class RegistrationsController extends AppController {
                 $str = 'INSERT INTO doctors_registrations (registration_id, doctor_id) VALUES (' . $this->Registration->id . ', ' . $doctor_id . ');';
                 $this->Registration->query($str);
 
-                $this->Session->setFlash('門診時段已新增！', 'alert', array(
-                    'plugin' => 'TwitterBootstrap',
-                    'class' => 'alert-success'
-                ));
+                if (!$is_exist_future_reg) {
+                    $this->Session->setFlash('門診時段已新增！', 'alert', array(
+                        'plugin' => 'TwitterBootstrap',
+                        'class' => 'alert-success'
+                    ));
+                } else {
+                    $this->Session->setFlash('門診時段已新增！<br /><br />注意！後續已有預約<br />' . $reg_time_str, 'alert', array(
+                        'plugin' => 'TwitterBootstrap',
+                        'class' => 'alert-success'
+                    ));           
+                }
                 CakeLog::write('debug', 'RegistrationsController.add() - 新增門診時段(' . $this->Registration->id . ')');
 
                 $date = new DateTime($this->request->data['Registration']['registration_time']);
@@ -223,7 +249,7 @@ class RegistrationsController extends AppController {
 
                             $time_slot_id = $this->TimeSlot->getTimeSlotId($this->request->data['Registration']['further_time']);
                             $this->Registration->saveField('time_slot_id', $time_slot_id);
-                            
+
                             $doctor_id = $this->Doctor->getDoctorId($this->request->data['Registration']['further_time'], $time_slot_id);
                             $str = 'UPDATE doctors_registrations SET doctor_id = ' . $doctor_id . ' WHERE registration_id = ' . $this->Registration->id . ';';
                             $this->Registration->query($str);
@@ -257,7 +283,7 @@ class RegistrationsController extends AppController {
                             $doctor_id = $this->Doctor->getDoctorId($this->request->data['Registration']['further_time'], $time_slot_id);
                             $str = 'INSERT INTO doctors_registrations (registration_id, doctor_id) VALUES (' . $this->Registration->id . ', ' . $doctor_id . ');';
                             $this->Registration->query($str);
-                            
+
                             CakeLog::write('debug', 'RegistrationsController.edit() - 建立門診資料(' . $id . ')連結的下次預約記錄(' . $this->Appointment->id . ')連結的門診資料(' . $this->Registration->id . ')');
                             $this->Registration->setPreviousAppointment($this->Registration->id, $this->Appointment->id);
                             CakeLog::write('debug', 'RegistrationsController.edit() - 建立門診資料(' . $id . ')連結的下次預約記錄(' . $this->Appointment->id . ')連結的門診資料(' . $this->Registration->id . ')與下次預約記錄的關係');

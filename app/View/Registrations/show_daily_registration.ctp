@@ -93,7 +93,9 @@ $count = 1;
     <th>建立病患</th>
     <th>編輯</th>
     <th>刪除</th>
+    <!--
     <th>預約單</th>
+    -->
 </thead>
 <tbody>
     <?php foreach ($results as $result): ?>
@@ -168,14 +170,16 @@ $count = 1;
         echo $this->Form->postLink('刪除', array('action' => 'delete', $result['registrations']['id']), array('confirm' => '確定要刪除嗎?'));
         ?>
     </td>
+    <!--
     <td>
-        <?php
-        $printLinkStr = '/pdf/registrations/print/' . $result['registrations']['id'];
-        if (!is_null($result['furthers_appointment_time']['appointment_time'])) {
-            echo $this->Html->link('列印', $printLinkStr);
-        }
-        ?>
+    <?php
+    $printLinkStr = '/pdf/registrations/print/' . $result['registrations']['id'];
+    if (!is_null($result['furthers_appointment_time']['appointment_time'])) {
+        echo $this->Html->link('列印', $printLinkStr);
+    }
+    ?>
     </td>
+    -->
     </tr>
 <?php endforeach; ?>
 </tbody>
