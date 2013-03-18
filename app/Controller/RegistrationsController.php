@@ -75,7 +75,7 @@ class RegistrationsController extends AppController {
                         $is_exist_future_reg = true;
                         $future_reg = array_values($future_reg);
                         for ($i = 0; $i < sizeof($future_reg); $i++) {
-                            $reg_time_str = $reg_time_str . $future_reg[$i] . '<br />';
+                            $reg_time_str = $reg_time_str . substr($future_reg[$i], 0, -3) . '<br />';
                         }
                     } else {
                         $is_exist_future_reg = false;
@@ -99,9 +99,9 @@ class RegistrationsController extends AppController {
                         'class' => 'alert-success'
                     ));
                 } else {
-                    $this->Session->setFlash('門診時段已新增！<br /><br />注意！後續已有預約<br />' . $reg_time_str, 'alert', array(
+                    $this->Session->setFlash('門診時段已新增！<br /><br />注意！後續已有預約<br /><h3>' . $reg_time_str. '</h3>', 'alert', array(
                         'plugin' => 'TwitterBootstrap',
-                        'class' => 'alert-success'
+                        'class' => 'alert-error'
                     ));           
                 }
                 CakeLog::write('debug', 'RegistrationsController.add() - 新增門診時段(' . $this->Registration->id . ')');

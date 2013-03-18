@@ -61,14 +61,47 @@
         </div>
         <div class="modal-body">
             <p>沒有聯絡電話的資訊，將不會被寄出！</p>
+            <h4>請輸入發送訊息：</h4>
+            <?php
+                $input_default_text = '';
+                if (strcmp(date("l"), "Saturday") == 0) {
+                    if (strcmp(date("a"), "am") == 0) {
+                        $input_default_text = '[field1]' . "早安~~" . '[field4]' . "貼心提醒您星期一" . '[field2]' . '[field3]' . "與心樂活有約喔^__^ 06-2383636";
+                    } else {
+                        if (intval(date("g")) >= 6) {
+                        $input_default_text = '[field1]' . "晚安~~" . '[field4]' . "貼心提醒您星期一" . '[field2]' . '[field3]' . "與心樂活有約喔^__^ 06-2383636";
+                        } else {
+                        $input_default_text = '[field1]' . "午安~~" . '[field4]' . "貼心提醒您星期一" . '[field2]' . '[field3]' . "與心樂活有約喔^__^ 06-2383636";
+                        }
+                    }
+                } else {
+                    if (strcmp(date("a"), "am") == 0) {
+                        $input_default_text = '[field1]' . "早安~~" . '[field4]' . "貼心提醒您明天" . '[field2]' . '[field3]' . "與心樂活有約喔^__^ 06-2383636";
+                    } else {
+                        if (intval(date("g")) >= 6) {
+                        $input_default_text = '[field1]' . "晚安~~" . '[field4]' . "貼心提醒您明天" . '[field2]' . '[field3]' . "與心樂活有約喔^__^ 06-2383636";
+                        } else {
+                        $input_default_text = '[field1]' . "午安~~" . '[field4]' . "貼心提醒您明天" . '[field2]' . '[field3]' . "與心樂活有約喔^__^ 06-2383636";
+                        }
+                    }
+                }
+                
+                echo $this->Form->input(uniqid(), array(
+                    'type' => 'textarea',
+                    'class' => 'input-xlarge',
+                    'default' => $input_default_text
+                )); ?>
+            <hr>
+            <h4>請輸入欄位資訊：</h4>
             <fieldset>
             <table class="table table-striped">
                 <thead>
                 <th>聯絡電話</th>
-                <th>聯絡姓名</th>
-                <th>預約時段</th>
-                <th>預約時間</th>
-                <th>額外提醒</th>
+                <th>聯絡姓名 [field1]</th>
+                <th>預約時段 [field2]</th>
+                <th>預約時間 [field3]</th>
+                <th>額外提醒 [field4]</th>
+                <th>備用欄位 [field5]</th>
                 </thead>
                 <tbody>
                 <?php foreach ($to_be_sending_messages as $message): ?>
@@ -108,6 +141,13 @@
                             'value' => ''
                         )); ?>
                     </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'input-medium',
+                            'value' => ''
+                        )); ?>
+                    </td>
                     </tr>
                 <?php endforeach; ?>
                 <?php for ($i = 0; $i < 12; $i++) { ?>
@@ -137,6 +177,13 @@
                         <?php echo $this->Form->input(uniqid(), array(
                             'type' => 'text',
                             'class' => 'span6',
+                            'value' => ''
+                        )); ?>
+                    </td>
+                    <td>
+                        <?php echo $this->Form->input(uniqid(), array(
+                            'type' => 'text',
+                            'class' => 'input-medium',
                             'value' => ''
                         )); ?>
                     </td>
