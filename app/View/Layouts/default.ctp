@@ -33,6 +33,7 @@
         echo $this->Html->css('bootstrap');
         echo $this->Html->css('bootstrap-datepicker');
         echo $this->Html->css('bootstrap-timepicker');
+        echo $this->Html->css('jNotify.jquery');
 
         echo $this->fetch('meta');
         echo $this->fetch('css');
@@ -108,6 +109,16 @@
                             </li>
                             </li>
                             <?php
+                                if (preg_match("/\/lohas\/doctors/", $this->request->here)) {
+                                    echo '<li class="active">';
+                                } else {
+                                    echo '<li>';
+                                }
+                                echo $this->Html->link('醫師資料', '/doctors', array('icon' => 'certificate'));
+                            ?>
+                            </li>
+                            </li>
+                            <?php
                                 if (preg_match("/\/lohas\/sources/", $this->request->here)) {
                                     echo '<li class="active">';
                                 } else {
@@ -153,7 +164,6 @@
                                 echo $this->Html->link('簡訊提醒', '/calllists/showCallList', array('icon' => 'bell'));
                             ?>
                             </li>
-                            <!--
                             <?php
                                 if (preg_match("/\/lohas\/sendlists/", $this->request->here) ||
                                     preg_match("/\/lohas\/SendLists/", $this->request->here)) {
@@ -164,7 +174,6 @@
                                 echo $this->Html->link('發送簡訊', '/calllists/showSendList', array('icon' => 'envelope'));
                             ?>
                             </li>
-                            -->
                             <li class="divider"></li>
                             <li class="nav-header">相關統計數據</li>							
                             <?php
@@ -211,6 +220,7 @@
         <?php echo $this->Html->script('bootstrap.min'); ?>
         <?php echo $this->Html->script('bootstrap-datepicker'); ?>
         <?php echo $this->Html->script('bootstrap-timepicker'); ?>
+        <?php echo $this->Html->script('jNotify.jquery.min'); ?>
         <?php echo $this->fetch('script'); ?>
 
     </body>

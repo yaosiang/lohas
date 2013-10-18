@@ -3,6 +3,22 @@
 class Doctor extends AppModel {
 
     public $validate = array(
+        // 'available' => array(
+        //     'rule'    => array('boolean'),
+        //     'message' => 'Incorrect value'
+        // ),
+        // 'vacation_start' => array(
+        //     'rule' => array('datetime', 'ymd'),
+        //     'message' => 'Date only',
+        //     'required' => false,
+        //     'allowEmpty' => false
+        // ),
+        // 'vacation_end' => array(
+        //     'rule' => array('datetime', 'ymd'),
+        //     'message' => 'Date only',
+        //     'required' => false,
+        //     'allowEmpty' => false
+        // ),
         'description' => array(
             'rule' => 'alphaNumeric',
             'message' => 'Alphabets and numbers only',
